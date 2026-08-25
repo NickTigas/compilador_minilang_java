@@ -5,7 +5,7 @@ public class lexic {
         Token t = null;
 
         while((t= lex.proximoToken()) !=null){
-            System.out.println(t);
+            System.out.print(t);
         }
 
     }
