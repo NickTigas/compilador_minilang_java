@@ -73,7 +73,7 @@ public class leitor {
 
     private int lercharbuffer(){
         int ret = bufferleitura[ponteiro];
-        System.out.print(this);
+        System.out.println(this);
         initponteiro();
         return ret;
     }

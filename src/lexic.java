@@ -4,8 +4,8 @@ public class lexic {
         lexico lex = new lexico(args[0]);
         Token t = null;
 
-        while((t= lex.proximoToken()) !=null){
-            System.out.print(t);
+        while((t= lex.proximoToken()).nome !=TipoToken.END){
+            System.out.println(t);
         }
 
     }

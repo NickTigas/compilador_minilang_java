@@ -8,12 +8,69 @@ public class lexico {
     public Token proximoToken() {
         int charlido = -1;
 
+        Token prox = null;
+        WHITESPACE_COMMENT();
+        ldat.confirmar();
+
+        prox = end();
+        if(prox == null) ldat.zerar();
+        else{
+            ldat.confirmar();
+            return prox;
+        }
+        prox = reservado();
+        if(prox == null) ldat.zerar();
+        else{
+            ldat.confirmar();
+            return prox;
+        }
+        prox = var();
+        if(prox == null) ldat.zerar();
+        else{
+            ldat.confirmar();
+            return prox;
+        }
+        prox = parenteses();
+        if(prox == null) ldat.zerar();
+        else{
+            ldat.confirmar();
+            return prox;
+        }
+        prox = NUMBER();
+        if(prox == null) ldat.zerar();
+        else{
+            ldat.confirmar();
+            return prox;
+        }
+        prox = opAritimetico();
+        if(prox == null) ldat.zerar();
+        else{
+            ldat.confirmar();
+            return prox;
+        }
+        prox = opRelacional();
+        if(prox == null) ldat.zerar();
+        else{
+            ldat.confirmar();
+            return prox;
+        }
+        prox = program();
+        if(prox == null) ldat.zerar();
+        else{
+            ldat.confirmar();
+            return prox;
+        }
+        //todos os padroes
+
+        System.err.println("Erro léxico kk");
+        System.err.println(ldat.toString());
+
         //espaço em branco
         while ((charlido = ldat.lerproxchar()) != -1) {
             char c = (char) charlido;
             if (c == ' ' || c == '\n') continue;
             if (c == 'p') {
-                return new Token(TipoToken.PROGAM, "PROGAM");
+                return new Token(TipoToken.PROGRAM, "PROGRAM");
             } else if (c == '=') {
                 c = (char) ldat.lerproxchar();
                 // verifica o prox char, pra confirma se eh ==
@@ -69,10 +126,13 @@ public class lexico {
         else return null;
 
     }
-    private Token delimit(){
+
+    private Token program(){
         int charlido = ldat.lerproxchar();
-        char c = (char)charlido;
-        if(c=='p') return new Token(TipoToken.PROGAM, ldat.getLexema());
+        if(charlido == -1) {
+            return new Token(TipoToken.PROGRAM, "program");
+            //new Token(TipoToken.PROGRAM, ldat.getLexema());
+        }
         else return null;
 
     }
@@ -188,6 +248,39 @@ public class lexico {
             }
         }
     }
+    private Token reservado(){
+        while (true) {
+            char c = (char) ldat.lerproxchar();
+            if(!Character.isLetterOrDigit(c)){
+                ldat.rollback();
+                String lexema = ldat.getLexema();
 
-    
+                if(lexema.equals("program")) return new Token(TipoToken.PROGRAM, lexema);
+                else if(lexema.equals("begin")) return new Token(TipoToken.BEGIN, lexema);
+                else if(lexema.equals("end")) return new Token(TipoToken.END, lexema);
+                else if(lexema.equals("read")) return new Token(TipoToken.READ, lexema);
+                else if(lexema.equals("write")) return new Token(TipoToken.WRITE, lexema);
+                else if(lexema.equals("if")) return new Token(TipoToken.IF, lexema);
+                else if(lexema.equals("then")) return new Token(TipoToken.THEN, lexema);
+                else if(lexema.equals("else")) return new Token(TipoToken.ELSE, lexema);
+                else if(lexema.equals("while")) return new Token(TipoToken.WHILE, lexema);
+                else if(lexema.equals("do")) return new Token(TipoToken.DO, lexema);
+                else if(lexema.equals("int")) return new Token(TipoToken.INT, lexema);
+                else if(lexema.equals("float")) return new Token(TipoToken.FLOAT, lexema);
+                else return null;
+            }
+
+        }
+    }
+
+  /*(  private Token pontuacao(){
+
+    }*/
+
+    private Token end(){
+        int charlido = ldat.lerproxchar();
+        if(charlido == -1) return new Token(TipoToken.END, "end");
+        return null;
+    }
+
 }
