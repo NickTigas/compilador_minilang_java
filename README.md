@@ -106,7 +106,7 @@ java lexic caminho/para/programa.minilang
 
 ## Autores
 
-_Daniel Santiago Purificação_
+_Daniel Santiago Purificação/n_
 _Felipe de Lima Monteiro_
 _João Vitor Ludovino Leite Alves_
 _Nicolas Caldeira dos Santos_
