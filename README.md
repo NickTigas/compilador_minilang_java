@@ -106,12 +106,12 @@ java lexic caminho/para/programa.minilang
 
 ## Autores
 
-_Daniel Santiago Purificação/n_
-_Felipe de Lima Monteiro_
-_João Vitor Ludovino Leite Alves_
-_Nicolas Caldeira dos Santos_
-_Nicolas Jimenes Haase_
-_Pedro Dias Guedes Santos_
+Daniel Santiago Purificação
+Felipe de Lima Monteiro
+João Vitor Ludovino Leite Alves
+Nicolas Caldeira dos Santos
+Nicolas Jimenes Haase
+Pedro Dias Guedes Santos
 
 ## Disciplina
 
