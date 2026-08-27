@@ -3,6 +3,8 @@ public class Token {
     public String lexema;
 
     public Token(TipoToken tipoToken, String s) {
+        this.nome = tipoToken;
+        this.lexema = s;
     }
 
     @Override

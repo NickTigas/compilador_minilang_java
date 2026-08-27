@@ -238,8 +238,7 @@ public class lexico {
             }
               else if(estado==2){
                 if (c == '%') estado = 3;
-                else if (!Character.isWhitespace(c) || c == ' ') {
-                    ldat.rollback();
+                else if (!Character.isWhitespace(c)) {// tirei o "|| c == ' '", o que parava a leitura no meio de espaços seguidos
                     return;
                 }
             }

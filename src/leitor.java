@@ -28,7 +28,7 @@ public class leitor {
         bufferatual = 2;
         inilexema = 0;
         lexema = "";
-        bufferleitura = new int[tamanhobuffer];
+        bufferleitura = new int[tamanhobuffer *2 ]; // taca dando problema por conta do tam do buffer
         ponteiro = 0;
         recabuffer1();
     }
@@ -36,7 +36,7 @@ public class leitor {
     private void initponteiro() {
         ponteiro++;
         if (ponteiro == tamanhobuffer) recabuffer2();
-        else if (ponteiro == tamanhobuffer + 2) {
+        else if (ponteiro == tamanhobuffer * 2) {// como são 40 posições(0-39) quando ele chega na posição 40 ele passa do limite de (0-39)
             recabuffer1();
             ponteiro = 0;
         }
@@ -60,7 +60,7 @@ public class leitor {
         if (bufferatual == 1) {
             bufferatual = 2;
 
-        for (int i = tamanhobuffer; i < tamanhobuffer + 2; i++) {
+        for (int i = tamanhobuffer; i < tamanhobuffer * 2; i++) {// só preenche 2 posições
             try {
                 bufferleitura[i] = is.read();
                 if (bufferleitura[i] == -1) break;
@@ -88,7 +88,7 @@ public class leitor {
     public void rollback(){
         ponteiro--;
         lexema = lexema.substring(0,lexema.length() - 1);
-        if(ponteiro <0) ponteiro = tamanhobuffer*2-1;
+        if(ponteiro <0) ponteiro = tamanhobuffer*2-1; // talvez isso impacta a linha 39 por causa do ponteiro negativo ele dá voltas assim podendo cair na posição 40 no qual quebra as posições(0-39)
 
     }
 
