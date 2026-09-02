@@ -1,12 +1,16 @@
 public class lexico {
-    leitor ldat;
+    leitor ldat; //variavel ldat do "tipo" leitor
 
     public lexico(String arquivo) {
         ldat = new leitor(arquivo);
     }
+    /* Cria objeto lexico -> recebe "programa.txt" -> cria um objeto leitor
+    -> passa "programa.txt" para leitor -> guarda o leitor em ldat */
 
-    public Token proximoToken() {
-        int charlido = -1;
+    public Token proximoToken() {//Core do analisador lexico
+        //faz e leitura do texto de entrada até reconhecer um padrão
+
+        int charlido = -1; //começa em -1
 
         Token prox = null;
         WHITESPACE_COMMENT();
@@ -60,6 +64,12 @@ public class lexico {
             ldat.confirmar();
             return prox;
         }
+        prox = semicolon();
+        if(prox == null) ldat.zerar();
+        else{
+            ldat.confirmar();
+            return prox;
+        }
         //todos os padroes
 
         System.err.println("Erro léxico kk");
@@ -67,39 +77,42 @@ public class lexico {
 
         //espaço em branco
         while ((charlido = ldat.lerproxchar()) != -1) {
-            char c = (char) charlido;
-            if (c == ' ' || c == '\n') continue;
+            char c = (char) charlido; //ler char
+            if (c == ' ' || c == '\n') continue; // espaço em branco ou \n = ignora
             if (c == 'p') {
                 return new Token(TipoToken.PROGRAM, "PROGRAM");
-            } else if (c == '=') {
+
+            } else if (c == '=') { //compara o char =
                 c = (char) ldat.lerproxchar();
                 // verifica o prox char, pra confirma se eh ==
                 if (c == '=') {
                     return new Token(TipoToken.EQ, "==");
-                } else {
+                } else { // caso n seja eh =
                     ldat.rollback();
                     return new Token(TipoToken.ASSIGN, "=");
                 }
+                //operadores aritimeticos
             } else if (c == '+') return new Token(TipoToken.PLUS, "+");
                 else if (c == '-') return new Token(TipoToken.MINUS, "-");
                 else if (c == '*') return new Token(TipoToken.TIMES, "*");
                 else if (c == '/') return new Token(TipoToken.DIVIDE, "/");
 
-                else if (c == '<') {
+                //operadores logicos
+                else if (c == '<') {//compara o char <
                 c = (char) ldat.lerproxchar();
-                // verifica o prox char, pra confirma se eh ==
+                // verifica o prox char, pra confirma se eh <=
                 if (c == '=') {
                     return new Token(TipoToken.LE, "<=");
-                } else {
+                } else { // caso n seja eh <
                     ldat.rollback();
                     return new Token(TipoToken.LT, "<");
                 }
-            } else if (c == '>') {
+            } else if (c == '>') {//compara o char >
                 c = (char) ldat.lerproxchar();
                 // verifica o prox char, pra confirma se eh >=
-                if (c == '=') {
+                if (c == '=') { // verifica o prox char, pra confirma se eh >=
                     return new Token(TipoToken.GE, ">=");
-                } else {
+                } else { // caso n seja eh >
                     ldat.rollback();
                     return new Token(TipoToken.GT, ">");
                 }
@@ -107,7 +120,7 @@ public class lexico {
             else if (c == ')') return new Token(TipoToken.RPAREN, ")");
             else if (c == '{') return new Token(TipoToken.LBRACE, "{");
             else if (c == '}') return new Token(TipoToken.RBRACE, "}");
-            else if (c == ';') return new Token(TipoToken.SEMICOLON, ";");
+            //else if (c == ';') return new Token(TipoToken.SEMICOLON, ";");
             else if (c == ':') return new Token(TipoToken.COLON, ":");
             else if (c == ',') return new Token(TipoToken.COMMA, ",");
             else if (c == '.') return new Token(TipoToken.DOT, ".");
@@ -136,6 +149,17 @@ public class lexico {
         else return null;
 
     }
+
+    private Token semicolon(){ //delimitar final de linha
+        int charlido = ldat.lerproxchar();
+        if(charlido == -1) {
+            return new Token(TipoToken.SEMICOLON, ";");
+            //new Token(TipoToken.PROGRAM, ldat.getLexema());
+        }
+        else return null;
+
+    }
+
     private Token parenteses(){
         int charlido = ldat.lerproxchar();
         char c = (char)charlido;

@@ -1,8 +1,8 @@
 public class Token {
-    public TipoToken nome;
-    public String lexema;
+    public TipoToken nome; //instancia do TipoToken
+    public String lexema; //valor
 
-    public Token(TipoToken tipoToken, String s) {
+    public Token(TipoToken tipoToken, String s) { //metodo construtor
         this.nome = tipoToken;
         this.lexema = s;
     }
@@ -11,5 +11,5 @@ public class Token {
     public String toString(){
        return "<"+nome+","+lexema+">";
     }
-
+        //metodo toString pra mostrar na tela as instancias + os valores
 }
