@@ -13,7 +13,7 @@ public class lexico {
         int charlido = -1; //começa em -1
 
         Token prox = null;
-        WHITESPACE_COMMENT();
+        WHITESPACE();
         ldat.confirmar();
 
         prox = end();
@@ -58,6 +58,12 @@ public class lexico {
             ldat.confirmar();
             return prox;
         }
+        prox = comment();
+        if(prox == null) ldat.zerar();
+        else{
+            ldat.confirmar();
+            return prox;
+        }
         prox = program();
         if(prox == null) ldat.zerar();
         else{
@@ -74,8 +80,7 @@ public class lexico {
 
         System.err.println("Erro léxico kk");
         System.err.println(ldat.toString());
-
-        //espaço em branco
+        /*
         while ((charlido = ldat.lerproxchar()) != -1) {
             char c = (char) charlido; //ler char
             if (c == ' ' || c == '\n') continue; // espaço em branco ou \n = ignora
@@ -120,11 +125,12 @@ public class lexico {
             else if (c == ')') return new Token(TipoToken.RPAREN, ")");
             else if (c == '{') return new Token(TipoToken.LBRACE, "{");
             else if (c == '}') return new Token(TipoToken.RBRACE, "}");
-            //else if (c == ';') return new Token(TipoToken.SEMICOLON, ";");
+            else if (c == ';') return new Token(TipoToken.SEMICOLON, ";");
             else if (c == ':') return new Token(TipoToken.COLON, ":");
             else if (c == ',') return new Token(TipoToken.COMMA, ",");
             else if (c == '.') return new Token(TipoToken.DOT, ".");
         }
+        */
         return null;
     }
 
@@ -152,7 +158,7 @@ public class lexico {
 
     private Token semicolon(){ //delimitar final de linha
         int charlido = ldat.lerproxchar();
-        if(charlido == -1) {
+        if(charlido == ';') {
             return new Token(TipoToken.SEMICOLON, ";");
             //new Token(TipoToken.PROGRAM, ldat.getLexema());
         }
@@ -237,31 +243,51 @@ public class lexico {
         while (true){
             char c = (char) ldat.lerproxchar();
             if(valor==1){
-                if(Character.isDigit(c)) valor = 2;
+                if(Character.isDigit(c)) valor = 2; //verific se eh digito
                 else return null;
             }
             else if(valor==2){
-                if(!Character.isLetterOrDigit(c)){
+                if(!Character.isLetterOrDigit(c)){//digito ou letra
                     ldat.rollback();
                     return new Token(TipoToken.VAR, ldat.getLexema());
                 }
             }
         }
     }
-    private void WHITESPACE_COMMENT(){
+
+    private Token comment(){
+        int com = 1;
+        while(true){
+            char c = (char) ldat.lerproxchar();
+            if(com==1){
+                if(c=='^') com = 2;
+                else return null;
+            }
+            else if (com == 2){
+                if(c=='\n') return null;
+                if(c=='^') return new Token(TipoToken.COMMENT, ldat.getLexema());
+                else if (c== '\\') com = 3;
+            } else if (com == 3){
+                if(c=='\n') return null;
+                else com = 2;
+            }
+        }
+    }
+
+    private void WHITESPACE(){
         int estado = 1;
         while (true) {
             char c = (char) ldat.lerproxchar();
             if (estado == 1) {
                 if (Character.isWhitespace(c) || c == ' ') estado = 2;
-                else if (c == '%') estado = 3;
+                else if (c == '\t') estado = 3;
                 else {
                     ldat.rollback();
                     return;
                 }
             }
               else if(estado==2){
-                if (c == '%') estado = 3;
+                if (c == '\t') estado = 3;
                 else if (!Character.isWhitespace(c)) {// tirei o "|| c == ' '", o que parava a leitura no meio de espaços seguidos
                     return;
                 }
