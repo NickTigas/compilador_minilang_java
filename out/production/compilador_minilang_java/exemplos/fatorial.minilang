@@ -1,0 +1,11 @@
+   program fatorial:
+   begin
+       read(n);
+       fat = 1;
+       while n > 0 do
+       begin
+           fat = fat * n;
+           n = n - 1
+       end;
+       write(fat)
+   end.
