@@ -54,4 +54,13 @@ public class parser {
         mensagem += ") foi encontrado"+lookahead(1);
         throw new RuntimeException(mensagem);
     }
+
+    //programa : 'program' ':' 'nome'
+    public void program(){
+        match(TipoToken.PROGRAM); //program
+        match(TipoToken.COLON); //:
+        //match(TipoToken. ); //nome do programa
+
+    }
+
 }

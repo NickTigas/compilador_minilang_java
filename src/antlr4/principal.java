@@ -11,7 +11,6 @@ public class principal {
 
         CharStream cs = CharStreams.fromFileName(args[0]);
 
-
         lexeri lex = new lexeri(cs);
 
         Token t;

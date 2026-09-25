@@ -76,6 +76,13 @@ public class lexico {
             ldat.confirmar();
             return prox;
         }
+        prox = colon();
+        if(prox == null) ldat.zerar();
+        else{
+            ldat.confirmar();
+            return prox;
+        }
+
         //todos os padroes
 
         System.err.println("Erro léxico kk");
@@ -330,6 +337,13 @@ public class lexico {
         int charlido = ldat.lerproxchar();
         if(charlido == -1) return new Token(TipoToken.END, "end");
         return null;
+    }
+
+    private Token colon() {
+        int charlido = ldat.lerproxchar();
+        char c = (char) charlido;
+        if (c == ':') return new Token(TipoToken.COLON, ":");
+        else return null;
     }
 
 }
