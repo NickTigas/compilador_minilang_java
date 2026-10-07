@@ -27,7 +27,6 @@ public class parser {
             Token proximo = lexico.proximoToken();
             bufferTokens.add(proximo);
             if (proximo.nome == TipoToken.END) fim = true;
-
         }
         System.out.print("Foi lido"+lookahead(1));
     }
@@ -61,7 +60,16 @@ public class parser {
         match(TipoToken.ID); //nome do programa
         match(TipoToken.COLON); //:
     }
+
+    //declaraçao variavel
+    void declaracao(){
+        match(TipoToken.VAR);
+        match(TipoToken.INT);
+        match(TipoToken.ID);
+    }
+
     //aritimetico
+    //serve para remover a recursao a esquerda
     void aritimetico(){
         termoaritimetico();
         aritimetico2();
@@ -117,6 +125,35 @@ public class parser {
             match(TipoToken.INT);
         }else if (lookahead(1).nome == TipoToken.VAR) {
             match(TipoToken.VAR);
+        }else{
+            erroSintatico("tipo errado");
         }
     }
+
+    void relacional(){
+        if(lookahead(1).nome == TipoToken.INT || lookahead(1).nome == TipoToken.VAR ||
+        lookahead(1).nome == TipoToken.LPAREN){
+            aritimetico();
+            oprelacional();
+            aritimetico();
+        }
+        else if(lookahead(1).nome == TipoToken.LPAREN){
+            match(TipoToken.LPAREN);
+            relacional();
+            match(TipoToken.RPAREN);
+        } else{
+            erroSintatico("Tipo errado eu acho");
+        }
+    }
+
+    void oprelacional(){
+        if(lookahead(1).nome == TipoToken.ASSIGN) match(TipoToken.ASSIGN);//=
+        else if(lookahead(1).nome == TipoToken.EQ) match(TipoToken.EQ);//==
+        else if(lookahead(1).nome == TipoToken.LT) match(TipoToken.LT);//<
+        else if(lookahead(1).nome == TipoToken.GT) match(TipoToken.GT);//>
+        else if(lookahead(1).nome == TipoToken.LE) match(TipoToken.LE);//<=
+        else if(lookahead(1).nome == TipoToken.GE) match(TipoToken.GE);//>=
+
+    }
+
 }
