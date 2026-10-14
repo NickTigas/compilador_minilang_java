@@ -19,7 +19,7 @@ public class lexeri extends Lexer {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		RESERVADA=1, VAR=2, NUMINT=3, NUMFLOAT=4, OP_RELACIONAL=5, OP_ARITMETICO=6, 
+		RESERVADA=1, VAR=2, NUMINT=3, OP_RELACIONAL=5, OP_ARITMETICO=6,
 		WHITESPACE=7;
 	public static String[] channelNames = {
 		"DEFAULT_TOKEN_CHANNEL", "HIDDEN"
@@ -31,7 +31,7 @@ public class lexeri extends Lexer {
 
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"LETTER", "DIGIT", "RESERVADA", "VAR", "NUMINT", "NUMFLOAT", "OP_RELACIONAL", 
+			"LETTER", "DIGIT", "RESERVADA", "VAR", "NUMINT", "OP_RELACIONAL",
 			"OP_ARITMETICO", "WHITESPACE"
 		};
 	}
@@ -44,7 +44,7 @@ public class lexeri extends Lexer {
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, "RESERVADA", "VAR", "NUMINT", "NUMFLOAT", "OP_RELACIONAL", "OP_ARITMETICO", 
+			null, "RESERVADA", "VAR", "NUMINT", "OP_RELACIONAL", "OP_ARITMETICO",
 			"WHITESPACE"
 		};
 	}

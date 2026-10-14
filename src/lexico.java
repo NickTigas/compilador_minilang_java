@@ -28,7 +28,7 @@ public class lexico {
             ldat.confirmar();
             return prox;
         }
-        prox = var();
+        prox = id();
         if(prox == null) ldat.zerar();
         else{
             ldat.confirmar();
@@ -77,6 +77,12 @@ public class lexico {
             return prox;
         }
         prox = colon();
+        if(prox == null) ldat.zerar();
+        else{
+            ldat.confirmar();
+            return prox;
+        }
+        prox = CADEIA_AUXILIAR();
         if(prox == null) ldat.zerar();
         else{
             ldat.confirmar();
@@ -245,7 +251,7 @@ public class lexico {
         }
     }
 
-    private Token var(){
+    private Token id(){
         int valor = 1;
         while (true){
             char c = (char) ldat.lerproxchar();
@@ -256,7 +262,7 @@ public class lexico {
             else if(valor==2){
                 if(!Character.isLetterOrDigit(c)){//digito ou letra
                     ldat.rollback();
-                    return new Token(TipoToken.VAR, ldat.getLexema());
+                    return new Token(TipoToken.ID, ldat.getLexema());
                 }
             }
         }
@@ -277,6 +283,25 @@ public class lexico {
             } else if (com == 3){
                 if(c=='\n') return null;
                 else com = 2;
+            }
+        }
+    }
+
+    private Token CADEIA_AUXILIAR(){
+        int aux = 1;
+        while(true){
+            char c = (char) ldat.lerproxchar();
+            if(aux==1){
+                if(c=='\'') aux = 2;
+                else return null;
+            }
+            else if (aux == 2){
+                if(c=='\n') return null;
+                if(c=='\'') return new Token(TipoToken.CADEIA, ldat.getLexema());
+                else if (c== '\\') aux = 3;
+            } else if (aux == 3){
+                if(c=='\n') return null;
+                else aux = 2;
             }
         }
     }
