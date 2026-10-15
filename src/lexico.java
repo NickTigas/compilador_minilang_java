@@ -223,47 +223,35 @@ public class lexico {
         else return null;
     }
 
-    private Token NUMBER(){
-        int number = 1;
-        while (true){
-            char c = (char) ldat.lerproxchar();
-            if(number==1){
-                if(Character.isDigit(c)) number = 2;
-                else return null;
-            }
-            else if(number==2) {
-                if (c == '.') {
-                    c = (char) ldat.lerproxchar();
-                    if (Character.isDigit(c)) number = 3;
-                    else return null;
-                }
-            }
-            else if(!Character.isDigit(c)){
-                ldat.rollback();
-                return new Token(TipoToken.NUMBER, ldat.getLexema());
-            }
-            else if(number==3){
-                if(!Character.isDigit(c)){
+    private Token NUMBER() {
+        char c = (char) ldat.lerproxchar();
+        if (!Character.isDigit(c)) return null;
+        while (true) {
+            c = (char) ldat.lerproxchar();
+            if (Character.isDigit(c)) continue;
+            if (c == '.') {
+                char d = (char) ldat.lerproxchar();
+                if (Character.isDigit(d)) {
+                    while (Character.isDigit(c = (char) ldat.lerproxchar())) ;
                     ldat.rollback();
                     return new Token(TipoToken.NUMBERREAL, ldat.getLexema());
                 }
+                ldat.rollback(); ldat.rollback();   // devolve '.' e d
+                return new Token(TipoToken.NUMBER, ldat.getLexema());
             }
+            ldat.rollback();
+            return new Token(TipoToken.NUMBER, ldat.getLexema());
         }
     }
 
-    private Token id(){
-        int valor = 1;
-        while (true){
-            char c = (char) ldat.lerproxchar();
-            if(valor==1){
-                if(Character.isDigit(c)) valor = 2; //verific se eh digito
-                else return null;
-            }
-            else if(valor==2){
-                if(!Character.isLetterOrDigit(c)){//digito ou letra
-                    ldat.rollback();
-                    return new Token(TipoToken.ID, ldat.getLexema());
-                }
+    private Token id() {
+        char c = (char) ldat.lerproxchar();
+        if (!Character.isLetter(c)) return null;
+        while (true) {
+            c = (char) ldat.lerproxchar();
+            if (!Character.isLetterOrDigit(c)) {
+                ldat.rollback();
+                return new Token(TipoToken.ID, ldat.getLexema());
             }
         }
     }
@@ -306,29 +294,13 @@ public class lexico {
         }
     }
 
-    private void WHITESPACE(){
-        int estado = 1;
+    private void WHITESPACE() {
         while (true) {
             char c = (char) ldat.lerproxchar();
-            if (estado == 1) {
-                if (Character.isWhitespace(c) || c == ' ') estado = 2;
-                else if (c == '\t') estado = 3;
-                else {
-                    ldat.rollback();
-                    return;
-                }
-            }
-              else if(estado==2){
-                if (c == '\t') estado = 3;
-                else if (!Character.isWhitespace(c)) {// tirei o "|| c == ' '", o que parava a leitura no meio de espaços seguidos
-                    return;
-                }
-            }
-              else if(estado==3){
-                  if(c=='\n') return;
-            }
+            if (!Character.isWhitespace(c)) { ldat.rollback(); return; }
         }
     }
+
     private Token reservado(){
         while (true) {
             char c = (char) ldat.lerproxchar();
@@ -354,10 +326,6 @@ public class lexico {
         }
     }
 
-  /*(  private Token pontuacao(){
-
-    }*/
-
     private Token end(){
         int charlido = ldat.lerproxchar();
         if(charlido == -1) return new Token(TipoToken.END, "end");
@@ -371,4 +339,8 @@ public class lexico {
         else return null;
     }
 
+    private Token dot() {
+        if ((char) ldat.lerproxchar() == '.') return new Token(TipoToken.DOT, ".");
+        return null;
+    }
 }

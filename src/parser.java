@@ -36,12 +36,14 @@ public class parser {
         // nao resolve mt coisa mas, evita de dar problema
         return  bufferTokens.get(k-1);//pega o token que ta a frente
     }
-    void match(TipoToken tipo){
-        if(lookahead(1).nome == tipo){
-            System.out.print("Foi"+lookahead(1));
+    Token match(TipoToken tipo){
+        Token atual = lookahead(1);
+        if(atual.nome == tipo){
             lerToken(); //avança a leitura
+            return atual;
         }else{
             erroSintatico(tipo.toString());
+            return null;
         }
     }
     void erroSintatico(String... tokensEsperados){
@@ -55,189 +57,142 @@ public class parser {
     }
 
     //programa nome: 'program' 'id' ':'
-    public void program(){
-        match(TipoToken.PROGRAM); //program
-        match(TipoToken.ID);
-        declaracao();//nome do programa
-        match(TipoToken.COLON); //:
-
+    public No program() {
+        match(TipoToken.PROGRAM);
+        Token nome = match(TipoToken.ID);
+        match(TipoToken.COLON);
+        No corpo = bloco();
+        match(TipoToken.DOT);
+        return new No("PROGRAM", nome.lexema).add(corpo);
     }
 
-    //declaraçao variavel
-    void declaracao(){
-        match(TipoToken.ID);
-        match(TipoToken.INT);
-        match(TipoToken.ID);
+    //delimitacao apartir do " ; " para separar o codigo em blocos
+    No bloco() {
+        match(TipoToken.BEGIN);
+        No b = new No("BLOCO").add(comando());
+        while (lookahead(1).nome == TipoToken.SEMICOLON) {
+            match(TipoToken.SEMICOLON);
+            b.add(comando());
+        }
+        match(TipoToken.END);
+        return b;
     }
 
     //aritimetico
     //serve para remover a recursao a esquerda
-    void aritimetico(){
-        termoaritimetico();
-        aritimetico2();
-    }
-     void aritimetico2(){
-        if(lookahead(1).nome == TipoToken.PLUS || lookahead(1).nome == TipoToken.MINUS){
-            aritimetico2DLC1();
-            aritimetico2();
-        }else{
-            //vazio
+    No aritimetico() {
+        No esq = termoaritimetico();
+        while (lookahead(1).nome == TipoToken.PLUS || lookahead(1).nome == TipoToken.MINUS) {
+            Token op = match(lookahead(1).nome);
+            No dir = termoaritimetico();
+            esq = new No("BINOP", op.lexema).add(esq).add(dir);
         }
+        return esq;
     }
 
-    void aritimetico2DLC1(){//+, -
-        if(lookahead(1).nome == TipoToken.PLUS){
-            match(TipoToken.PLUS);
-            termoaritimetico();
-        }else if(lookahead(1).nome == TipoToken.MINUS){
-            match(TipoToken.MINUS);
-            termoaritimetico();
-        } else{
-            erroSintatico("+","-");
+    No termoaritimetico() {
+        No esq = fatoraritimetico();
+        while (lookahead(1).nome == TipoToken.TIMES || lookahead(1).nome == TipoToken.DIVIDE) {
+            Token op = match(lookahead(1).nome);
+            No dir = fatoraritimetico();
+            esq = new No("BINOP", op.lexema).add(esq).add(dir);
         }
+        return esq;
     }
 
-    void termoaritimetico(){
-        fatoraritimetico();
-        termoaritimetico2();
-    }
-    void termoaritimetico2(){
-        if(lookahead(1).nome == TipoToken.TIMES || lookahead(1).nome == TipoToken.DIVIDE){
-            termoaritimetico2DLC1();
-            termoaritimetico2();
-        }else{
-            //vazio
-        }
-    }
-
-    void termoaritimetico2DLC1(){//+, -
-        if(lookahead(1).nome == TipoToken.TIMES){
-            match(TipoToken.TIMES);
-            fatoraritimetico();
-        }else if(lookahead(1).nome == TipoToken.DIVIDE){
-            match(TipoToken.DIVIDE);
-            fatoraritimetico();
-        }else{
-            erroSintatico("*","/");
-        }
-    }
-
-    void fatoraritimetico() {
-        if(lookahead(1).nome == TipoToken.INT) {
-            match(TipoToken.INT);
-        }else if (lookahead(1).nome == TipoToken.ID) {
-            match(TipoToken.ID);
-        }else if(lookahead(1).nome == TipoToken.LPAREN){
+    No fatoraritimetico() {
+        Token t = lookahead(1);
+        if (t.nome == TipoToken.NUMBER)  { match(TipoToken.NUMBER); return new No("NUM", t.lexema); }
+        if (t.nome == TipoToken.ID)      { match(TipoToken.ID);     return new No("ID", t.lexema); }
+        if (t.nome == TipoToken.LPAREN) {
             match(TipoToken.LPAREN);
-            aritimetico();
+            No e = aritimetico();
             match(TipoToken.RPAREN);
-        }else{
-            erroSintatico("INT","ID","(");
+            return e;                      // parênteses não precisam de nó
+        }
+        erroSintatico("NUMBER", "ID", "(");
+        return null;
+    }
+
+    No relacional() {
+        No esq = aritimetico();
+        Token op = oprelacional();
+        No dir = aritimetico();
+        return new No("REL", op.lexema).add(esq).add(dir);
+    }
+
+    Token oprelacional() {
+        TipoToken t = lookahead(1).nome;
+        if (t == TipoToken.EQ || t == TipoToken.LT || t == TipoToken.GT
+                || t == TipoToken.LE || t == TipoToken.GE || t == TipoToken.ASSIGN)
+            return match(t);
+        erroSintatico("==", "<", ">", "<=", ">=");
+        return null;
+    }
+
+    No comando() {
+        switch (lookahead(1).nome) {
+            case ID: return atrib();
+            case BEGIN: return bloco();
+            case READ:  return read();
+            case WRITE: return write();
+            case IF:    return condicao();
+            case WHILE: return loop();
+            default: erroSintatico("atrib", "begin", "read", "write", "if", "while"); return null;
         }
     }
-
-    void relacional(){
-        if(lookahead(1).nome == TipoToken.INT || lookahead(1).nome == TipoToken.ID ||
-        lookahead(1).nome == TipoToken.LPAREN){
-            aritimetico();
-            oprelacional();
-            aritimetico();
+    //"if" "condicao" "then" "comando" "else"(caso necessidade) "comando" => if a>b then write(a) else write(b)
+    No condicao() {
+        match(TipoToken.IF);//if
+        No cond = relacional();
+        match(TipoToken.THEN);//then
+        No entao = comando();
+        No se = new No("IF").add(cond).add(entao);
+        if (lookahead(1).nome == TipoToken.ELSE) {
+            match(TipoToken.ELSE);//else
+            se.add(comando());
         }
-        else if(lookahead(1).nome == TipoToken.LPAREN){
-            match(TipoToken.LPAREN);
-            relacional();
-            match(TipoToken.RPAREN);
-        } else{
-            erroSintatico("Tipo errado eu acho");
-        }
+        return se;
     }
 
-    void oprelacional(){
-        if(lookahead(1).nome == TipoToken.ASSIGN) match(TipoToken.ASSIGN);//=
-        else if(lookahead(1).nome == TipoToken.EQ) match(TipoToken.EQ);//==
-        else if(lookahead(1).nome == TipoToken.LT) match(TipoToken.LT);//<
-        else if(lookahead(1).nome == TipoToken.GT) match(TipoToken.GT);//>
-        else if(lookahead(1).nome == TipoToken.LE) match(TipoToken.LE);//<=
-        else if(lookahead(1).nome == TipoToken.GE) match(TipoToken.GE);//>=
-        else erroSintatico("=","==","<",">",",=",">=");
-    }
-
-    void listaComand(){
-        comando();
-        listaComandDLC1();
-    }
-
-    void listaComandDLC1(){
-        if(lookahead(1).nome == TipoToken.BEGIN || lookahead(1).nome == TipoToken.END ||
-                lookahead(1).nome == TipoToken.IF || lookahead(1).nome == TipoToken.THEN ||
-                lookahead(1).nome == TipoToken.DO || lookahead(1).nome == TipoToken.WHILE ||
-                lookahead(1).nome == TipoToken.WRITE || lookahead(1).nome == TipoToken.READ ||
-                lookahead(1).nome == TipoToken.ELSE){
-           listaComand();
-        }
-        else{
-            //vazio
-        }
-    }
-
-    void comando(){
-        if(lookahead(1).nome == TipoToken.BEGIN) subAlgoritimo();
-        else if (lookahead(1).nome == TipoToken.READ)  read();
-        else if(lookahead(1).nome == TipoToken.WRITE) write();
-        else if (lookahead(1).nome == TipoToken.IF) condicao();
-        else if(lookahead(1).nome == TipoToken.WHILE) loop();
-        else if(lookahead(1).nome == TipoToken.DO) loop();
-        else if (lookahead(1).nome == TipoToken.THEN) condicao();
-        else erroSintatico("begin, read, write, if, while, do, then");
-    }
-
-    void subAlgoritimo(){
-        match(TipoToken.BEGIN);
-        listaComand();
-        match(TipoToken.END);
-    }
-
-    void loop() {
+    No loop() {
         match(TipoToken.WHILE);
-        relacional();
-        comando();
-        loopDLC1();
-    }
-    void loopDLC1(){
+        No cond = relacional();
         match(TipoToken.DO);
-        relacional();
-        match(TipoToken.WHILE);
-        comando();
+        No corpo = comando();
+        return new No("WHILE").add(cond).add(corpo);
     }
 
-    void condicao(){
-        match(TipoToken.IF);
-        relacional();
-        match(TipoToken.THEN);
-        comando();
-        condicaoDLC1();
+    //"read" "(" ")" => read()
+    No read() {
+        match(TipoToken.READ);//read
+        match(TipoToken.LPAREN);//(
+        Token id = match(TipoToken.ID);
+        match(TipoToken.RPAREN); //)
+        return new No("READ").add(new No("ID", id.lexema));
     }
-    void condicaoDLC1(){
-        if(lookahead(1).nome == TipoToken.ELSE){
-            match(TipoToken.ELSE);
-            comando();
-        }else{
-            //vazio
-        }
-    }
-    void read(){
-        match(TipoToken.READ);
-        match(TipoToken.ID);
-    }
-    void write(){
+
+    No write() {
         match(TipoToken.WRITE);
-        writeDLC();
+        Token t = lookahead(1);
+        if (t.nome == TipoToken.ID) {
+            match(TipoToken.ID);
+            return new No("WRITE").add(new No("ID", t.lexema));
+        }
+        if(t.nome == TipoToken.CADEIA) {
+            match(TipoToken.CADEIA);
+            return new No("WRITE").add(new No("CADEIA", t.lexema));
+        }
+        erroSintatico("ID", "CADEIA");
+        return null;
     }
 
-    void writeDLC(){
-        if(lookahead(1).nome == TipoToken.ID) match(TipoToken.ID);
-        else if(lookahead(1).nome == TipoToken.CADEIA) match(TipoToken.CADEIA);
-        else erroSintatico(TipoToken.ID.toString(), TipoToken.CADEIA.toString());
+    No atrib() {
+        Token id = match(TipoToken.ID);
+        match(TipoToken.ASSIGN);
+        No e = aritimetico();
+        return new No("ATRIB", id.lexema).add(e);
     }
+
 
 }
