@@ -52,7 +52,7 @@ parte do roadmap.
 
 ## Como compilar e rodar (estado atual)
 
-Hoje só é possível rodar o teste do analisador léxico:
+Hoje só é possível rodar o teste do analisador léxico e sintatico:
 
 ```bash
 cd src
