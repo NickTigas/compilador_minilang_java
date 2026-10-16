@@ -71,8 +71,8 @@ public class leitor {
                 Logger.getLogger(leitor.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        }
     }
-}
 
     private int lercharbuffer(){
         int ret = bufferleitura[ponteiro];
@@ -81,11 +81,13 @@ public class leitor {
         return ret;
     }
 
+    int posAbs = 0;   // offset atual
+    int iniAbs = 0;   // offset do início do lexema
     public int lerproxchar(){// metodo para ler char por char
         //int ret= is.read(); //retorna -1 quando chega no fim do arquivo
         int c = lercharbuffer(); // lex var acumula char
         lexema += (char)c ;
-        System.out.print((char)c);
+        posAbs++;
         return c;
     }
 
@@ -93,17 +95,22 @@ public class leitor {
         ponteiro--;
         lexema = lexema.substring(0,lexema.length() - 1); //tira o ultimo char do lexema
         if(ponteiro <0) ponteiro = tamanhobuffer*2-1; //lógica circular o final do ponteiro 2 conecta no começo do 1
+        posAbs--;
     }
 
     public void zerar(){// caso não identifique um padrão (>, =) ele volta o ponteiro pro inicio do lexema
         ponteiro = inilexema;
         lexema = ""; //lexema se torna vazio
+        posAbs = iniAbs;
     }
 
     public void confirmar(){ // pega o inicio do lexema e agrega ao ponteiro, passa a leitura para frente pra continuar dps
         inilexema = ponteiro;
         lexema = "";
+        iniAbs = posAbs;
     }
+
+    public int getInicio() { return iniAbs; }
 
     public String getLexema(){
         return  lexema;

@@ -3,7 +3,7 @@ import java.util.List;
 
 public class parser {
 
-    private static final int tamanhoBuffer = 10;
+    private static final int tamanhoBuffer = 1;
 
     private lexico lexico;
     private List<Token> bufferTokens;
@@ -46,14 +46,10 @@ public class parser {
             return null;
         }
     }
-    void erroSintatico(String... tokensEsperados){
-        String mensagem = "Erro Sintático: esperando -> (";
-        for(int i=0;i<tokensEsperados.length;i++){
-            mensagem += tokensEsperados[i];
-            if(i<tokensEsperados.length-1) mensagem += ","; //ve o final da linha e adiciona ,
-        }
-        mensagem += ") foi encontrado"+lookahead(1);
-        throw new RuntimeException(mensagem);
+    void erroSintatico(String... esperados){
+        Token t = lookahead(1);
+        String achado = (t.nome == TipoToken.EOF) ? "fim do arquivo" : "'" + t.lexema + "'";
+        throw new ErroCompilacao("Erro sintático: esperado " + String.join(" ou ", esperados) + ", encontrado " + achado, t.pos);
     }
 
     //programa nome: 'program' 'id' ':'
@@ -63,6 +59,7 @@ public class parser {
         match(TipoToken.COLON);
         No corpo = bloco();
         match(TipoToken.DOT);
+        match(TipoToken.EOF);//$ representa o fim de arquivo
         return new No("PROGRAM", nome.lexema).add(corpo);
     }
 

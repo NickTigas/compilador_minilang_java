@@ -1,3 +1,6 @@
+import java.util.List;
+import java.util.function.Supplier;
+
 public class lexico {
     leitor ldat; //variavel ldat do "tipo" leitor
 
@@ -10,6 +13,32 @@ public class lexico {
     public Token proximoToken() {//Core do analisador lexico
         //faz e leitura do texto de entrada até reconhecer um padrão
 
+        WHITESPACE();
+        ldat.confirmar();
+        int ini = ldat.getInicio();
+
+        List<Supplier<Token>> regras = List.of(//comment antes do oparitimetico se n da problema
+                this::end, this::reservado, this::id, this::parenteses, this::NUMBER,
+                this::comment, this::opAritimetico, this::opRelacional,
+                this::semicolon, this::colon, this::dot, this::CADEIA_AUXILIAR
+        );
+
+        for (Supplier<Token> regra : regras) {
+            Token t = regra.get();
+            if (t != null) {
+                ldat.confirmar();
+                if (t.nome == TipoToken.COMMENT) return proximoToken();   // ignora comentaria
+                t.pos = ini;
+                return t;
+            }
+            ldat.zerar();
+        }
+
+        // nenhuma regra reconheceu: erro léxico
+        int c = ldat.lerproxchar();
+        throw new ErroCompilacao("Erro léxico: caractere inesperado '" + (char) c + "'", ini);
+
+        /*
         int charlido = -1; //começa em -1
 
         Token prox = null;
@@ -93,7 +122,7 @@ public class lexico {
 
         System.err.println("Erro léxico kk");
         System.err.println(ldat.toString());
-        /*
+
         while ((charlido = ldat.lerproxchar()) != -1) {
             char c = (char) charlido; //ler char
             if (c == ' ' || c == '\n') continue; // espaço em branco ou \n = ignora
@@ -143,8 +172,8 @@ public class lexico {
             else if (c == ',') return new Token(TipoToken.COMMA, ",");
             else if (c == '.') return new Token(TipoToken.DOT, ".");
         }
-        */
-        return null;
+
+        return null;*/
     }
 
     private Token opAritimetico(){
@@ -256,21 +285,18 @@ public class lexico {
         }
     }
 
-    private Token comment(){
-        int com = 1;
-        while(true){
-            char c = (char) ldat.lerproxchar();
-            if(com==1){
-                if(c=='^') com = 2;
-                else return null;
-            }
-            else if (com == 2){
-                if(c=='\n') return null;
-                if(c=='^') return new Token(TipoToken.COMMENT, ldat.getLexema());
-                else if (c== '\\') com = 3;
-            } else if (com == 3){
-                if(c=='\n') return null;
-                else com = 2;
+    private Token comment() {
+        char c = (char) ldat.lerproxchar();
+        if (c != '/') return null;
+
+        c = (char) ldat.lerproxchar();
+        if (c != '/') return null;          // era só uma '/', deixa para opAritimetico
+
+        while (true) {
+            int r = ldat.lerproxchar();
+            if (r == -1 || r == '\n') {
+                ldat.rollback();            // devolve o '\n' (ou EOF) para quem vem depois
+                return new Token(TipoToken.COMMENT, ldat.getLexema());
             }
         }
     }
@@ -326,9 +352,8 @@ public class lexico {
         }
     }
 
-    private Token end(){
-        int charlido = ldat.lerproxchar();
-        if(charlido == -1) return new Token(TipoToken.END, "end");
+    private Token end() {                       // só fim de arquivo
+        if (ldat.lerproxchar() == -1) return new Token(TipoToken.EOF, "EOF");
         return null;
     }
 

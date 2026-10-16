@@ -1,0 +1,9 @@
+program erro: // OK
+begin
+ x = 10; // OK
+ y = x +; // ERRO: expressão incompleta
+ if x > 5 // ERRO: faltando 'then'
+ y = 20 // ERRO: faltando ';'
+ end; // ERRO: 'end' sem 'begin' correspondente
+ write(y)
+end. // OK, mas programa já está inválido

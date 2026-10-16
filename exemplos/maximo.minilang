@@ -1,0 +1,9 @@
+program maximo:
+begin
+ read(a);
+ read(b);
+ if a > b then
+ write(a)
+ else
+ write(b)
+end.

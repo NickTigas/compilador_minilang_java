@@ -1,0 +1,11 @@
+program soma_ate_zero:
+begin
+ soma = 0;
+ read(valor);
+ while valor > 0 do
+ begin
+ soma = soma + valor;
+ read(valor)
+ end;
+ write(soma)
+end.
