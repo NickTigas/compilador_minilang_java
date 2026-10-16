@@ -36,16 +36,27 @@ public class parser {
         // nao resolve mt coisa mas, evita de dar problema
         return  bufferTokens.get(k-1);//pega o token que ta a frente
     }
-    Token match(TipoToken tipo){
+    private Token anterior = null;
+
+    Token match(TipoToken tipo) {
         Token atual = lookahead(1);
-        if(atual.nome == tipo){
-            lerToken(); //avança a leitura
+        if (atual.nome == tipo) {
+            anterior = atual;
+            lerToken();
             return atual;
-        }else{
-            erroSintatico(tipo.toString());
-            return null;
         }
+        erroFaltando(tipo.toString());
+        return null;
     }
+
+    void erroFaltando(String esperado) {
+        Token t = lookahead(1);
+        int pos = (anterior != null) ? anterior.pos + anterior.lexema.length() : t.pos;
+        throw new ErroCompilacao("Erro sintático: faltando " + esperado
+                + " (encontrado " + (t.nome == TipoToken.EOF ? "fim do arquivo" : "'" + t.lexema + "'") + ")", pos);
+    }
+
+
     void erroSintatico(String... esperados){
         Token t = lookahead(1);
         String achado = (t.nome == TipoToken.EOF) ? "fim do arquivo" : "'" + t.lexema + "'";
@@ -190,6 +201,8 @@ public class parser {
         No e = aritimetico();
         return new No("ATRIB", id.lexema).add(e);
     }
+
+
 
 
 }
