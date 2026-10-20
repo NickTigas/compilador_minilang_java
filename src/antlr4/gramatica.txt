@@ -1,27 +1,63 @@
 grammar MiniLang;
 
+// *PARSER
+
 // PROGRAMA
-// programa : PROGRAM ID COLON ---bloco DOT---- ;
-// BLOCO E LINHAS
-// bloco : BEGIN linhas END ; linhas : linha | linha linhas ; linha : comando SEMICOLON ;
+// programa : PROGRAM ID COLON bloco DOT EOF ;
+
+// BLOCO
+// ';' e SEPARADOR entre comandos (nao e obrigatorio antes de 'end')
+// bloco : BEGIN comando ( SEMICOLON comando )* END ;
 
 // COMANDOS
-// comando : atrib | io | controle | /* vazio */ ;
-// ATRIBUIÇÃO
+// comando : atrib | read | write | condicional | loop | bloco ;
+
+// ATRIBUICAO
 // atrib : ID ASSIGN expr ;
 
-// ENTRADA E SAÍDA
-// io : READ LPAREN ID RPAREN | WRITE LPAREN expr RPAREN ;
+// ENTRADA E SAIDA
+// read  : READ LPAREN ID RPAREN ;
+// write : WRITE LPAREN expr RPAREN ;
 
 // ESTRUTURAS DE CONTROLE
-// controle : condicional | loop ; condicional : IF relacional THEN bloco | IF relacional THEN bloco ELSE bloco ; loop : WHILE relacional DO bloco ;
+// condicional : IF relacional THEN comando ( ELSE comando )? ;
+// loop        : WHILE relacional DO comando ;
 
-// EXPRESSÕES ARITMÉTICAS
-// expr : exprSimples | exprSimples PLUS expr | exprSimples MINUS expr ; exprSimples : termo | termo TIMES exprSimples | termo DIVIDE exprSimples ; termo : fator | LPAREN expr RPAREN ; fator : ID | NUMBER ;
+// EXPRESSOES ARITMETICAS (sem recursao a esquerda; + e - ligam mais fraco que * e /)
+// expr  : termo ( ( PLUS | MINUS ) termo )* ;
+// termo : fator ( ( TIMES | DIVIDE ) fator )* ;
+// fator : NUMBER | ID | LPAREN expr RPAREN ;
 
-// EXPRESSÕES RELACIONAIS
-// relacional : expr relop expr ; relop : EQ | LT | GT ;
+// EXPRESSOES RELACIONAIS
+// relacional : expr relop expr ;
+// relop      : ASSIGN | EQ | LT | GT | LE | GE ;
 
-// TOKENS
-// PROGRAM : 'program'; BEGIN : 'begin'; END : 'end'; READ : 'read'; WRITE : 'write'; IF : 'if'; THEN : 'then'; ELSE : 'else'; WHILE : 'while'; DO : 'do'; INT : 'int'; ASSIGN : '='; PLUS : '+'; MINUS : '-'; TIMES : '*'; DIVIDE : '/'; EQ : '=='; LT : '<'; GT : '>'; LPAREN : '('; RPAREN : ')'; LBRACE : '{'; RBRACE : '}'; SEMICOLON : ';'; COLON : ':'; COMMA : ','; DOT : '.'; ID : [a-z] [a-z0-9]*; NUMBER : [0-9]+; WHITESPACE : [ \t\r\n]+ -> skip; COMMENT : '//' ~[\r\n]* -> skip;
-// programa : 'program' ':' 'nome'
+// *LEXER
+
+// PALAVRAS RESERVADAS (somente minusculas)
+// PROGRAM : 'program'; BEGIN : 'begin'; END : 'end';
+// READ : 'read'; WRITE : 'write';
+// IF : 'if'; THEN : 'then'; ELSE : 'else';
+// WHILE : 'while'; DO : 'do';
+// INT : 'int'; FLOAT : 'float';
+
+// OPERADORES
+// ASSIGN : '='; EQ : '=='; LT : '<'; GT : '>'; LE : '<='; GE : '>=';
+// PLUS : '+'; MINUS : '-'; TIMES : '*'; DIVIDE : '/';
+
+// PONTUACAO
+// LPAREN : '('; RPAREN : ')'; LBRACE : '{'; RBRACE : '}';
+// SEMICOLON : ';'; COLON : ':'; DOT : '.';
+
+// LITERAIS E IDENTIFICADORES
+// ID         : [a-z] [a-z0-9]* ;
+// NUMBER     : [0-9]+ ;
+// NUMBERREAL : [0-9]+ '.' [0-9]+ ;
+// CADEIA     : '\'' ( '\\' . | ~['\\\n] )* '\'' ;
+
+// IGNORADOS (nao viram token)
+// WHITESPACE : [ \t\r\n]+ -> skip ;
+// COMMENT    : '//' ~[\n]* -> skip ;
+
+// FIM DE ARQUIVO
+// EOF (token interno gerado pelo lexico, distinto da palavra 'end')
