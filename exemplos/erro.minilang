@@ -4,6 +4,7 @@ begin
  y = x +; // ERRO: expressão incompleta
  if x > 5 // ERRO: faltando 'then'
  y = 20 // ERRO: faltando ';'
- end; // ERRO: 'end' sem 'begin' correspondente
+ //end // ERRO: 'end' sem 'begin' correspondente
+ read(y);
  write(y)
 end. // OK, mas programa já está inválido

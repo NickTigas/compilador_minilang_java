@@ -26,7 +26,7 @@ public class parser {
 
             Token proximo = lexico.proximoToken();
             bufferTokens.add(proximo);
-            if (proximo.nome == TipoToken.END) fim = true;
+            if (proximo.nome == TipoToken.EOF) fim = true;
         }
         System.out.print("Foi lido"+lookahead(1));
     }
@@ -162,7 +162,7 @@ public class parser {
         }
         return se;
     }
-
+    //while condicao corpo ou do condicao while
     No loop() {
         match(TipoToken.WHILE);
         No cond = relacional();
@@ -182,13 +182,17 @@ public class parser {
 
     No write() {
         match(TipoToken.WRITE);
+        match(TipoToken.LPAREN);
         Token t = lookahead(1);
         if (t.nome == TipoToken.ID) {
             match(TipoToken.ID);
+            match(TipoToken.RPAREN); //)
             return new No("WRITE").add(new No("ID", t.lexema));
+
         }
         if(t.nome == TipoToken.CADEIA) {
             match(TipoToken.CADEIA);
+            match(TipoToken.RPAREN); //)
             return new No("WRITE").add(new No("CADEIA", t.lexema));
         }
         erroSintatico("ID", "CADEIA");
@@ -201,8 +205,5 @@ public class parser {
         No e = aritimetico();
         return new No("ATRIB", id.lexema).add(e);
     }
-
-
-
 
 }
