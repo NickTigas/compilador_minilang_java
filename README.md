@@ -10,7 +10,6 @@ A especificação completa da linguagem (gramática BNF, tokens, semântica oper
 > Atualmente apenas o **analisador léxico** 
 > Analisador sintático, AST e interpretador ainda não foram implementados.
 
-
 ## Sobre a MiniLang
 
 - Paradigma imperativo e procedural
@@ -18,7 +17,6 @@ A especificação completa da linguagem (gramática BNF, tokens, semântica oper
 - Escopo global (até 26 variáveis, `a`–`z`)
 - Comandos de entrada/saída (`read`, `write`)
 - Estruturas de controle: sequência, `if`/`else` e `while`
-
 
 ## Arquitetura planejada
 
@@ -88,8 +86,8 @@ Hoje só é possível rodar o teste do analisador léxico e sintatico:
 cd src
 javac *.java
 java lexic caminho/para/programa.minilang
+Ex: java Cabeca ..\exemplos\fatorial.minilang 
 ```
-
 
 ## Roadmap / o que falta
 
