@@ -102,6 +102,27 @@ java lexic caminho/para/programa.minilang
 | `SEMICOLON`, `COLON`, `COMMA`, `DOT` | `;`, `:`, `,`, `.` | — |
 | `COMMENT` | `//[^\n]*` | `// comentário` |
 
+## Configurar
+
+### Antlr4
+
+- Primeiro deve-se abir o Terminal da IDE, no exemplo usado o Intelij, onde pode ser aberto pelo ícone ou pelo atalho Alt+F12 e colocar o caminho de onde está os arquivos .g4
+
+cd c:\users\cmd\ideaprojects\compilador_minilang_java\src\antlr4
+
+- Depois deve se gerar os arquivos da gramática caso eles não existam dentro da pasta antlr4 através da linha de comando:
+
+java - jar antlr-4.13.2-complete.jar lexeir.g4
+
+- Por Fim deve-se setar as dependências para poder usar o antrl4
+
+<img width="640" height="426" alt="antlr4_img_1" src="https://github.com/NickTigas/compilador_minilang_java/blob/master/imagens/antlr4_img_1.png" />
+
+<img width="640" height="426" alt="antlr4_img_1" src="https://github.com/NickTigas/compilador_minilang_java/blob/master/imagens/antlr4_img_2.png" />
+
+<img width="640" height="426" alt="antlr4_img_1" src="https://github.com/NickTigas/compilador_minilang_java/blob/master/imagens/antlr4_img_3.png" />
+
+<img width="640" height="426" alt="antlr4_img_1" src="https://github.com/NickTigas/compilador_minilang_java/blob/master/imagens/antlr4_img_4.png" />
 
 
 ## Autores
