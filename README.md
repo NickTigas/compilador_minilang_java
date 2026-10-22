@@ -128,7 +128,7 @@ java - jar antlr-4.13.2-complete.jar lexeir.g4
 
 - Para aplicar as dependências, basta selecionar o .exe ainda no no menu de módulos e aplicá-lo
 
-<img width="440" height="226" alt="antlr4_img_1" src="https://github.com/NickTigas/compilador_minilang_java/blob/master/imagens/antlr4_img_4.png" />
+<img width="440" height="226" alt="antlr4_img_1" src="https://github.com/NickTigas/compilador_minilang_java/blob/master/imagens/antlr4_img_5.png" />
 
 ### Compilar
 
