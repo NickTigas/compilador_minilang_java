@@ -80,7 +80,7 @@ java - jar antlr-4.13.2-complete.jar lexeir.g4
 
 <img width="440" height="226" alt="antlr4_img_1" src="https://github.com/NickTigas/compilador_minilang_java/blob/master/imagens/antlr4_img_5.png" />
 
-Hoje só é possível rodar o teste do analisador léxico e sintatico:
+Hoje só é possível rodar o teste do analisador léxico e sintático com geração AST
 
 ```bash
 cd src
