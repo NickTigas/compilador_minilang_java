@@ -122,8 +122,23 @@ java - jar antlr-4.13.2-complete.jar lexeir.g4
 
 <img width="440" height="226" alt="antlr4_img_1" src="https://github.com/NickTigas/compilador_minilang_java/blob/master/imagens/antlr4_img_3.png" />
 
+- E escolha a pasta no seu diretório antlr4 onde estiver o diretório do código instalado, o arquivo antl-4.13.2-complete.jar
+
 <img width="440" height="226" alt="antlr4_img_1" src="https://github.com/NickTigas/compilador_minilang_java/blob/master/imagens/antlr4_img_4.png" />
 
+- Para aplicar as dependências, basta selecionar o .exe ainda no no menu de módulos e aplicá-lo
+
+<img width="440" height="226" alt="antlr4_img_1" src="https://github.com/NickTigas/compilador_minilang_java/blob/master/imagens/antlr4_img_4.png" />
+
+### Compilar
+
+-No terminal, basta colocar esses comandos em ordem para compilar
+
+cd src 
+javac *.java
+java Cabeca ..\exemplos\fatorial.minilang 
+
+- Na escolha do código, basta mudar o nome do exemplo
 
 ## Autores
 
