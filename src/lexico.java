@@ -4,6 +4,14 @@ import java.util.function.Supplier;
 public class lexico {
     leitor ldat; //variavel ldat do "tipo" leitor
 
+    private boolean inicioId(char c) {
+        return (c >= 'a' && c <= 'z') || c == '_';
+    }
+
+    private boolean corpoId(char c) {
+        return (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '_';
+    }
+
     public lexico(String arquivo) {
         ldat = new leitor(arquivo);
     }
@@ -37,6 +45,8 @@ public class lexico {
         // nenhuma regra reconheceu: erro léxico
         int c = ldat.lerproxchar();
         throw new ErroCompilacao("Erro léxico: caractere inesperado '" + (char) c + "'", ini);
+
+
 
         /*
         int charlido = -1; //começa em -1
@@ -192,7 +202,6 @@ public class lexico {
         int charlido = ldat.lerproxchar();
         if(charlido == -1) {
             return new Token(TipoToken.PROGRAM, "program");
-            //new Token(TipoToken.PROGRAM, ldat.getLexema());
         }
         else return null;
 
@@ -202,7 +211,6 @@ public class lexico {
         int charlido = ldat.lerproxchar();
         if(charlido == ';') {
             return new Token(TipoToken.SEMICOLON, ";");
-            //new Token(TipoToken.PROGRAM, ldat.getLexema());
         }
         else return null;
 
@@ -275,10 +283,10 @@ public class lexico {
 
     private Token id() {
         char c = (char) ldat.lerproxchar();
-        if (!Character.isLetter(c)) return null;
+        if (!inicioId(c)) return null;
         while (true) {
             c = (char) ldat.lerproxchar();
-            if (!Character.isLetterOrDigit(c)) {
+            if (!corpoId(c)) {
                 ldat.rollback();
                 return new Token(TipoToken.ID, ldat.getLexema());
             }
@@ -330,7 +338,7 @@ public class lexico {
     private Token reservado(){
         while (true) {
             char c = (char) ldat.lerproxchar();
-            if(!Character.isLetterOrDigit(c)){
+            if(!corpoId(c)){
                 ldat.rollback();
                 String lexema = ldat.getLexema();
 

@@ -50,7 +50,7 @@ grammar MiniLang;
 // SEMICOLON : ';'; COLON : ':'; DOT : '.';
 
 // LITERAIS E IDENTIFICADORES
-// ID         : [a-z] [a-z0-9]* ;
+// ID         : [a-z_] [a-z0-9_]* ;
 // NUMBER     : [0-9]+ ;
 // NUMBERREAL : [0-9]+ '.' [0-9]+ ;
 // CADEIA     : '\'' ( '\\' . | ~['\\\n] )* '\'' ;
