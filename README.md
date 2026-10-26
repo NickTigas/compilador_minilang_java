@@ -88,6 +88,9 @@ javac *.java
 java lexic caminho/para/programa.minilang
 Ex: java Cabeca ..\exemplos\fatorial.minilang 
 ```
+### Jdk
+
+Para a compilação do código é necessário uma versão atualizada do Kit de Desenvolvimento Java a partir da versão 26
 
 ## Roadmap / o que falta
 
