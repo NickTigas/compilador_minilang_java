@@ -101,7 +101,7 @@ java - jar antlr-4.13.2-complete.jar lexeri.g4
 
 - E escolha a pasta no seu diretório antlr4 onde estiver o diretório do código instalado, o arquivo antl-4.13.2-complete.jar
 
-<img width="400" height="106" alt="antlr4_img_1" src="https://github.com/NickTigas/compilador_minilang_java/blob/master/imagens/antlr4_img_4.png" />
+<img width="200" height="206" alt="antlr4_img_1" src="https://github.com/NickTigas/compilador_minilang_java/blob/master/imagens/antlr4_img_4.png" />
 
 - Para aplicar as dependências, basta selecionar o .exe ainda no no menu de módulos e aplicá-lo
 
