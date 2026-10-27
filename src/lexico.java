@@ -353,7 +353,6 @@ public class lexico {
                 else if(lexema.equals("while")) return new Token(TipoToken.WHILE, lexema);
                 else if(lexema.equals("do")) return new Token(TipoToken.DO, lexema);
                 else if(lexema.equals("int")) return new Token(TipoToken.INT, lexema);
-                else if(lexema.equals("float")) return new Token(TipoToken.FLOAT, lexema);
                 else return null;
             }
 
