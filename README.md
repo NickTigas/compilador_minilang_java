@@ -3,6 +3,7 @@
 Implementação de um interpretador para a **MiniLang**, uma linguagem de programação
 imperativa e extremamente simplificada, criada para fins didáticos na disciplina de
 Compiladores / Linguagens Formais e Autômatos.
+- O código foi feito utilizando-se da _IDE IntelliJ_<br>
 
 A especificação completa da linguagem (gramática BNF, tokens, semântica operacional e exemplos) 
 
@@ -37,12 +38,38 @@ Código-fonte (.minilang)
 
 ```
 src/
-├── Main.java        # Ponto de entrada (CLI) — ainda não implementado
-├── TipoToken.java    # Enum com os tipos de token da linguagem
-├── Token.java        # Representação de um token (tipo + lexema)
+├── Cabeca.java        # Função principal que realiza os chamados d
+├── Cabeca.class       # Arquivo class gerado na "compilação" da classe Cabeca
+├── ErroCompilacao.java  # Demonstração de erros de compilação com base na léxica e sintática da gramática
+├── ErroCompilacao.class # Arquivo class gerado na "compilação" da classe ErroCompilacao
 ├── leitor.java        # Leitor de arquivo com buffer duplo e rollback de lexema
+├── leitor.class        # Arquivo class gerado na "compilação" da classe leitor
+├── lexic.java          # Programa de teste do lexer (imprime os tokens de um arquivo)
+├── lexic.class        # Arquivo class gerado na "compilação" da classe lexic
 ├── lexico.java        # Analisador léxico (reconhecimento de tokens)
-└── lexic.java          # Programa de teste do lexer (imprime os tokens de um arquivo)
+├── lexico.class        # Arquivo class gerado na "compilação" da classe lexico
+├── Main.java        
+├── Main.class        # Arquivo class gerado na "compilação" da classe main
+├── No.java          # Representação de nós para a criação de uma AST
+├── No.class        # Arquivo class gerado na "compilação" da classe no
+├── Parser.java         # Analisador sintático (reconhecimento da "escrita" da oração da gramática)
+├── Parser.class        # Arquivo class gerado na "compilação" da classe parser
+├── TipoToken.java    # Enum com os tipos de token da linguagem
+├── TipoToken.class   # Arquivo class gerado na "compilação" da classe TipoToken
+├── Token.java        # Representação de um token (tipo + lexema)
+└── Token.class         # Arquivo class gerado na "compilação" da classe Cabeca
+└── antlr/├──antlr-4.13.2-complete.jar # Versão do Antlr4 para usar como Token
+          ├──gramatica.txt # Gramática minilang em txt
+          ├──lexeri.java
+          ├──lexeri.g4 
+          ├──lexeri.interp # Interpretador gerado pelo lexeri.g4
+          ├──lexeri.token # Tokens gerados pelo lexri.g4
+          └──principal.java
+exemplos/
+├──erro.minilang         # Exemplo de erros na linguagem minilang 
+├──fatorial.minilang      # Exemplo funcional de código minilang em fatorial
+├──maximo.minilang        # Exemplo funcional de código minilang em valor máximo
+└──soma_ate_zero.minilang   # Exemplo funcional de código minilang em soma até zero
 ```
 
 Ainda não existem os pacotes/classes de **parser**, **AST** e **interpretador** — fazem
@@ -61,7 +88,7 @@ cd c:\users\cmd\ideaprojects\compilador_minilang_java\src\antlr4
 - Depois deve se gerar os arquivos da gramática caso eles não existam dentro da pasta antlr4 através da linha de comando:
 
 ```bash
-java - jar antlr-4.13.2-complete.jar lexeir.g4
+java - jar antlr-4.13.2-complete.jar lexeri.g4
 ```
 
 - Por Fim deve-se setar as dependências para poder usar o antrl4
@@ -91,6 +118,8 @@ Ex: java Cabeca ..\exemplos\fatorial.minilang
 ### Jdk
 
 Para a compilação do código é necessário uma versão atualizada do Kit de Desenvolvimento Java a partir da versão 26
+
+Também se faz necessário a utilização de uma versão Java a partir da versão 11
 
 ## Roadmap / o que falta
 
@@ -128,10 +157,12 @@ Para a compilação do código é necessário uma versão atualizada do Kit de D
 | `ID` | `[a-z][a-z0-9]*` | `x`, `contador` |
 | `NUMBER` | `[0-9]+` | `0`, `42` |
 | `ASSIGN`, `PLUS`, `MINUS`, `TIMES`, `DIVIDE` | `=`, `+`, `-`, `*`, `/` | — |
-| `EQ`, `LT`, `GT` | `==`, `<`, `>` | — |
+| `EQ`, `LT`, `GT`, LE, GE | `==`, `<`, `>` , `=<`, `>=` | — |
 | `LPAREN`, `RPAREN`, `LBRACE`, `RBRACE` | `(`, `)`, `{`, `}` | — |
 | `SEMICOLON`, `COLON`, `COMMA`, `DOT` | `;`, `:`, `,`, `.` | — |
 | `COMMENT` | `//[^\n]*` | `// comentário` |
+| `CADEIA` | `" "` | 'hello world" |
+| `EOF` | "$" | "EOF/$"
 
 ## Autores
 
