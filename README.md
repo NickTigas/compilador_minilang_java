@@ -82,7 +82,7 @@ parte do roadmap.
 - Primeiro deve-se abir o Terminal da IDE, no exemplo usado o Intelij, onde pode ser aberto pelo ícone ou pelo atalho Alt+F12 e colocar o caminho de onde está os arquivos .g4
 
 ```bash
-cd c:\users\cmd\ideaprojects\compilador_minilang_java\src\antlr4
+cd compilador_minilang_java\src\antlr4
 ```
 
 - Depois deve se gerar os arquivos da gramática caso eles não existam dentro da pasta antlr4 através da linha de comando:
