@@ -95,7 +95,7 @@ java - jar antlr-4.13.2-complete.jar lexeri.g4
 
 <img width="400" height="206" alt="antlr4_img_1" src="https://github.com/NickTigas/compilador_minilang_java/blob/master/imagens/antlr4_img_1.png" />
 
-<img width="440" height="366" alt="antlr4_img_1" src="https://github.com/NickTigas/compilador_minilang_java/blob/master/imagens/antlr4_img_2.png" />
+<img width="440" height="406" alt="antlr4_img_1" src="https://github.com/NickTigas/compilador_minilang_java/blob/master/imagens/antlr4_img_2.png" />
 
 <img width="400" height="206" alt="antlr4_img_1" src="https://github.com/NickTigas/compilador_minilang_java/blob/master/imagens/antlr4_img_3.png" />
 
