@@ -3,19 +3,19 @@
 Implementação de um interpretador para a **MiniLang**, uma linguagem de programação
 imperativa e extremamente simplificada, criada para fins didáticos na disciplina de
 Compiladores / Linguagens Formais e Autômatos.
-- O código foi feito utilizando-se da _IDE IntelliJ_<br>
+- O código foi feito utilizando-se da _**IDE IntelliJ**_<br>
 
 A especificação completa da linguagem (gramática BNF, tokens, semântica operacional e exemplos) 
 
 > ⚠️ **Status do projeto: em desenvolvimento.**
-> Atualmente apenas o **analisador léxico** 
-> Analisador sintático, AST e interpretador ainda não foram implementados.
+> Atualmente apenas o **analisador léxico, analisador sintático e AST** 
+> Analisador semântico e interpretador ainda não foram implementados.
 
 ## Sobre a MiniLang
 
 - Paradigma imperativo e procedural
 - Único tipo de dado: inteiros não negativos
-- Escopo global (até 26 variáveis, `a`–`z`)
+- Escopo global (até 26 variáveis, `a`–`z`, `a`–`z`[0-9])
 - Comandos de entrada/saída (`read`, `write`)
 - Estruturas de controle: sequência, `if`/`else` e `while`
 
@@ -38,7 +38,7 @@ Código-fonte (.minilang)
 
 ```
 src/
-├── Cabeca.java        # Função principal que realiza os chamados d
+├── Cabeca.java        # Função principal que recebe entradas, faz chamados de funções e imprimi saídas
 ├── Cabeca.class       # Arquivo class gerado na "compilação" da classe Cabeca
 ├── ErroCompilacao.java  # Demonstração de erros de compilação com base na léxica e sintática da gramática
 ├── ErroCompilacao.class # Arquivo class gerado na "compilação" da classe ErroCompilacao
@@ -60,8 +60,8 @@ src/
 └── Token.class         # Arquivo class gerado na "compilação" da classe Cabeca
 └── antlr/├──antlr-4.13.2-complete.jar # Versão do Antlr4 para usar como Token
           ├──gramatica.txt # Gramática minilang em txt
-          ├──lexeri.java
-          ├──lexeri.g4 
+          ├──lexeri.java # Classe java gerada pelo lexeri.g4
+          ├──lexeri.g4   # Léxica da gramática feita apartir do Antlr4
           ├──lexeri.interp # Interpretador gerado pelo lexeri.g4
           ├──lexeri.token # Tokens gerados pelo lexri.g4
           └──principal.java
@@ -72,7 +72,7 @@ exemplos/
 └──soma_ate_zero.minilang   # Exemplo funcional de código minilang em soma até zero
 ```
 
-Ainda não existem os pacotes/classes de **parser**, **AST** e **interpretador** — fazem
+Ainda não existem os pacotes/classes de **semântica** e **interpretador** — fazem
 parte do roadmap.
 
 ## Como compilar e rodar (estado atual)
@@ -93,19 +93,19 @@ java - jar antlr-4.13.2-complete.jar lexeri.g4
 
 - Por Fim deve-se setar as dependências para poder usar o antrl4
 
-<img width="440" height="226" alt="antlr4_img_1" src="https://github.com/NickTigas/compilador_minilang_java/blob/master/imagens/antlr4_img_1.png" />
+<img width="400" height="206" alt="antlr4_img_1" src="https://github.com/NickTigas/compilador_minilang_java/blob/master/imagens/antlr4_img_1.png" />
 
-<img width="440" height="226" alt="antlr4_img_1" src="https://github.com/NickTigas/compilador_minilang_java/blob/master/imagens/antlr4_img_2.png" />
+<img width="440" height="296" alt="antlr4_img_1" src="https://github.com/NickTigas/compilador_minilang_java/blob/master/imagens/antlr4_img_2.png" />
 
-<img width="440" height="226" alt="antlr4_img_1" src="https://github.com/NickTigas/compilador_minilang_java/blob/master/imagens/antlr4_img_3.png" />
+<img width="400" height="206" alt="antlr4_img_1" src="https://github.com/NickTigas/compilador_minilang_java/blob/master/imagens/antlr4_img_3.png" />
 
 - E escolha a pasta no seu diretório antlr4 onde estiver o diretório do código instalado, o arquivo antl-4.13.2-complete.jar
 
-<img width="440" height="226" alt="antlr4_img_1" src="https://github.com/NickTigas/compilador_minilang_java/blob/master/imagens/antlr4_img_4.png" />
+<img width="400" height="206" alt="antlr4_img_1" src="https://github.com/NickTigas/compilador_minilang_java/blob/master/imagens/antlr4_img_4.png" />
 
 - Para aplicar as dependências, basta selecionar o .exe ainda no no menu de módulos e aplicá-lo
 
-<img width="440" height="226" alt="antlr4_img_1" src="https://github.com/NickTigas/compilador_minilang_java/blob/master/imagens/antlr4_img_5.png" />
+<img width="400" height="206" alt="antlr4_img_1" src="https://github.com/NickTigas/compilador_minilang_java/blob/master/imagens/antlr4_img_5.png" />
 
 Hoje só é possível rodar o teste do analisador léxico e sintático com geração AST
 
@@ -123,11 +123,6 @@ Também se faz necessário a utilização de uma versão Java a partir da versã
 
 ## Roadmap / o que falta
 
-- [ ] Corrigir os bugs do lexer listados acima
-- [ ] Analisador sintático (parser) para a gramática LL(1) da seção 2.2 da
-      especificação (já com recursão à esquerda eliminada e fatoração à esquerda)
-- [ ] Construção da AST (nós para programa, bloco, atribuição, read, write, if,
-      while, expressões e relações)
 - [ ] Interpretador seguindo a semântica operacional da seção 4 da especificação:
   - [ ] Tabela de símbolos (26 variáveis, inicializadas em 0)
   - [ ] Avaliador de expressões aritméticas (`aval`)
@@ -135,13 +130,6 @@ Também se faz necessário a utilização de uma versão Java a partir da versã
   - [ ] Execução de comandos (atribuição, sequência, condicional, laço)
   - [ ] Fila de entrada / lista de saída
   - [ ] Erro de execução para divisão por zero
-- [ ] Tratamento de erros léxicos e sintáticos com mensagens claras (arquivo, posição,
-      caractere/token inesperado)
-- [ ] `Main.java` funcional: recebe o arquivo-fonte e os valores de entrada, roda o
-      pipeline completo e imprime a saída
-- [ ] Casos de teste automatizados a partir dos exemplos da especificação (seção 5):
-      fatorial, máximo de dois números, soma até zero e o programa inválido
-      (para validar mensagens de erro)
 
 ## Tokens reconhecidos
 
