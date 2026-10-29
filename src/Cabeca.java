@@ -1,3 +1,7 @@
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 
@@ -54,4 +58,5 @@ public class Cabeca {
         System.err.println(num + texto);
         System.err.println(" ".repeat(num.length() - 2) + "| " + pad + "^");
     }
+
 }
