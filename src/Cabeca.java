@@ -1,17 +1,23 @@
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
-
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
+import antlr4.Aritimetico;
 
 public class Cabeca {
     public static void main(String[] args) throws Exception {
         if (args.length == 0) {
-            System.err.println("Uso: java Cabeca <arquivo.minilang>");
+            System.err.println("Uso: java Cabeca <arquivo.minilang | arquivo.expr>");
             System.exit(2);
         }
         String caminho = args[0];
+        if (caminho.endsWith(".expr")) {
+            try {
+                System.out.println(Aritimetico.calcular(caminho));
+            } catch (RuntimeException e) {
+                System.err.println(e.getMessage());
+                System.exit(1);
+            }
+            return;
+        }
         if (!caminho.endsWith(".minilang")) {
             System.err.println("Erro: o arquivo precisa ter a extensão .minilang");
             System.exit(2);
