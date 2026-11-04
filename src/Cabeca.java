@@ -34,10 +34,14 @@ public class Cabeca {
         try {
             parser pars = new parser(new lexico(caminho));
             No raiz = pars.program();
-            raiz.imprimir();
+            if (args.length > 1 && args[1].equals("--ast")) raiz.imprimir();
+            else new Interpretador().executar(raiz);
         } catch (ErroCompilacao e) {
             mostrarErro(caminho, fonte, e);
             System.exit(1);
+        } catch (RuntimeException e) {          // erros de execução
+        System.err.println(e.getMessage());
+        System.exit(1);
         }
     }
 
