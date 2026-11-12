@@ -1,6 +1,7 @@
+import antlr4.Aritimetico;
+
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
-import antlr4.Aritimetico;
 
 public class Cabeca {
     public static void main(String[] args) throws Exception {

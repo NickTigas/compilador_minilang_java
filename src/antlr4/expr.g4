@@ -2,6 +2,11 @@ grammar expr;
 
 @header { package antlr4; }
 
+@parser::members {
+    public java.util.Map<String, Integer> vars =
+        java.util.Collections.emptyMap();
+}
+
 program returns [int val]
     : expressao EOF { $val = $expressao.val; } ;
 
@@ -25,8 +30,19 @@ termo2 [int her] returns [int sint]
 
 fator returns [int val]
     : '(' expressao ')' { $val = $expressao.val; }
-    | NUM               { $val = Integer.parseInt($NUM.text); }
+    | NUM { $val = Integer.parseInt($NUM.text); }
+    | ID {
+        Integer valor = vars.get($ID.text);
+
+        if (valor == null)
+            throw new RuntimeException(
+                "Variável '" + $ID.text + "' sem valor"
+            );
+
+        $val = valor;
+    }
     ;
 
-NUM : [0-9]+ ;
-WS  : [ \t\r\n]+ -> skip ;
+NUM : [0-9]+;
+ID  : [a-z_] [a-z_0-9]*;
+WS  : [ \t\r\n]+ -> skip;

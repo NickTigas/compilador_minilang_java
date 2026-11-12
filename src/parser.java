@@ -28,7 +28,6 @@ public class parser {
             bufferTokens.add(proximo);
             if (proximo.nome == TipoToken.EOF) fim = true;
         }
-        System.out.print("Foi lido"+lookahead(1));
     }
     Token lookahead(int k){
         if(bufferTokens.isEmpty()) return null;
@@ -88,38 +87,62 @@ public class parser {
 
     //aritimetico
     //serve para remover a recursao a esquerda
+
+    // Expressões aritméticas encaminhadas ao ANTLR como texto
     No aritimetico() {
-        No esq = termoaritimetico();
-        while (lookahead(1).nome == TipoToken.PLUS || lookahead(1).nome == TipoToken.MINUS) {
-            Token op = match(lookahead(1).nome);
-            No dir = termoaritimetico();
-            esq = new No("BINOP", op.lexema).add(esq).add(dir);
-        }
-        return esq;
+        return new No("EXPR", expressaoAritmetica());
     }
 
-    No termoaritimetico() {
-        No esq = fatoraritimetico();
-        while (lookahead(1).nome == TipoToken.TIMES || lookahead(1).nome == TipoToken.DIVIDE) {
+    private String expressaoAritmetica() {
+        StringBuilder expr = new StringBuilder(termoaritimetico());
+
+        while (lookahead(1).nome == TipoToken.PLUS ||
+                lookahead(1).nome == TipoToken.MINUS) {
+
             Token op = match(lookahead(1).nome);
-            No dir = fatoraritimetico();
-            esq = new No("BINOP", op.lexema).add(esq).add(dir);
+            expr.append(op.lexema).append(termoaritimetico());
         }
-        return esq;
+
+        return expr.toString();
     }
 
-    No fatoraritimetico() {
+    private String termoaritimetico() {
+        StringBuilder expr = new StringBuilder(fatoraritimetico());
+
+        while (lookahead(1).nome == TipoToken.TIMES ||
+                lookahead(1).nome == TipoToken.DIVIDE) {
+
+            Token op = match(lookahead(1).nome);
+            expr.append(op.lexema).append(fatoraritimetico());
+        }
+
+        return expr.toString();
+    }
+
+    private String fatoraritimetico() {
         Token t = lookahead(1);
-        if (t.nome == TipoToken.NUMBER)  { match(TipoToken.NUMBER); return new No("NUM", t.lexema); }
-        if (t.nome == TipoToken.ID)      { match(TipoToken.ID);     return new No("ID", t.lexema); }
+
+        if (t.nome == TipoToken.NUMBER) {
+            match(TipoToken.NUMBER);
+            return t.lexema;
+        }
+
+        if (t.nome == TipoToken.ID) {
+            match(TipoToken.ID);
+            return t.lexema;
+        }
+
         if (t.nome == TipoToken.LPAREN) {
             match(TipoToken.LPAREN);
-            No e = aritimetico();
+
+            String expr = expressaoAritmetica();
+
             match(TipoToken.RPAREN);
-            return e;                      // parênteses não precisam de nó
+            return "(" + expr + ")";
         }
+
         erroSintatico("NUMBER", "ID", "(");
-        return null;
+        return "";
     }
 
     No relacional() {
@@ -183,20 +206,16 @@ public class parser {
     No write() {
         match(TipoToken.WRITE);
         match(TipoToken.LPAREN);
-        Token t = lookahead(1);
-        if (t.nome == TipoToken.ID) {
-            match(TipoToken.ID);
-            match(TipoToken.RPAREN); //)
-            return new No("WRITE").add(new No("ID", t.lexema));
+        No arg;
+        if (lookahead(1).nome == TipoToken.CADEIA) {
+            Token t = match(TipoToken.CADEIA);
+            arg = new No("CADEIA", t.lexema);
+        } else {
+            arg = aritimetico();
+        }
+        match(TipoToken.RPAREN);
+        return new No("WRITE").add(arg);
 
-        }
-        if(t.nome == TipoToken.CADEIA) {
-            match(TipoToken.CADEIA);
-            match(TipoToken.RPAREN); //)
-            return new No("WRITE").add(new No("CADEIA", t.lexema));
-        }
-        erroSintatico("ID", "CADEIA");
-        return null;
     }
 
     No atrib() {

@@ -76,7 +76,6 @@ public class leitor {
 
     private int lercharbuffer(){
         int ret = bufferleitura[ponteiro];
-        System.out.println(this);//estado atual da leitura do buffer
         initponteiro();
         return ret;
     }

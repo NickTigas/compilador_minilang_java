@@ -19,8 +19,7 @@ RESERVADA : 'int'
           | 'begin'
           | 'while'
           | 'do'
-          | 'program'
-          | 'float';
+          | 'program';
 
 // Variáveis
 VAR : LETTER (LETTER | DIGIT)* {

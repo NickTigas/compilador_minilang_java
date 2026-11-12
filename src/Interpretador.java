@@ -1,7 +1,7 @@
 import java.util.*;
 
 public class Interpretador {
-    private final Map<String, Double> vars = new HashMap<>();
+    private final Map<String, Integer> vars = new HashMap<>();
     private final Scanner entrada = new Scanner(System.in);
 
     public void executar(No programa) {
@@ -21,7 +21,7 @@ public class Interpretador {
                 System.out.print(nome + " = ");
                 if (!entrada.hasNext()) throw new RuntimeException("Erro de execução: entrada vazia em read(" + nome + ")");
                 String txt = entrada.next();
-                try { vars.put(nome, Double.parseDouble(txt)); }
+                try { vars.put(nome, Integer.parseInt(txt)); }
                 catch (NumberFormatException e) { throw new RuntimeException("Erro de execução: '" + txt + "' não é número"); }
                 break;
             case "WRITE":
@@ -42,8 +42,8 @@ public class Interpretador {
     }
 
     private boolean condicao(No n) {                       // nó REL
-        double a = avaliar(n.filhos.get(0));
-        double b = avaliar(n.filhos.get(1));
+        int a = avaliar(n.filhos.get(0));
+        int b = avaliar(n.filhos.get(1));
         switch (n.lexema) {
             case "=": case "==": return a == b;
             case "<":  return a < b;
@@ -54,31 +54,22 @@ public class Interpretador {
         }
     }
 
-    private double avaliar(No n) {
-        switch (n.tipo) {
-            case "NUM": return Double.parseDouble(n.lexema);
-            case "ID":
-                Double v = vars.get(n.lexema);
-                if (v == null) throw new RuntimeException("Erro de execução: variável '" + n.lexema + "' sem valor");
-                return v;
-            case "BINOP":
-                double a = avaliar(n.filhos.get(0));
-                double b = avaliar(n.filhos.get(1));
-                switch (n.lexema) {
-                    case "+": return a + b;
-                    case "-": return a - b;
-                    case "*": return a * b;
-                    case "/":
-                        if (b == 0) throw new RuntimeException("Erro de execução: divisão por zero");
-                        return a / b;
-                }
-            default:
-                throw new RuntimeException("Expressão inválida: " + n.tipo);
+    private int avaliar(No n) {
+
+        if (n.tipo.equals("EXPR")) {
+            return antlr4.Aritimetico.calcularExpressao(
+                    n.lexema,
+                    vars
+            );
         }
+
+        throw new RuntimeException(
+                "Expressão inválida: " + n.tipo
+        );
     }
 
-    private String formatar(double d) {                    // 120.0 -> 120
-        return d == Math.rint(d) && Math.abs(d) < 1e15 ? String.valueOf((long) d) : String.valueOf(d);
+    private String formatar(int valor) {
+        return Integer.toString(valor);
     }
 
     private String texto(String lex) {                     // tira aspas e escapes

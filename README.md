@@ -88,7 +88,8 @@ cd compilador_minilang_java\src\antlr4
 - Depois deve se gerar os arquivos da gramática caso eles não existam dentro da pasta antlr4 através da linha de comando:
 
 ```bash
-java - jar antlr-4.13.2-complete.jar lexeri.g4
+java -jar antlr-4.13.2-complete.jar lexeri.g4
+java -jar antlr-4.13.2-complete.jar expr.g4
 ```
 
 - Por Fim deve-se setar as dependências para poder usar o antrl4
@@ -112,8 +113,7 @@ Hoje só é possível rodar o teste do analisador léxico e sintático com gera�
 ```bash
 cd src
 javac *.java
-java lexic caminho/para/programa.minilang
-Ex: java Cabeca ..\exemplos\fatorial.minilang 
+Ex: src\compilar.bat exemplos\calculo.minilang
 ```
 ### Jdk
 
