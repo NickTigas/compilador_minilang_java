@@ -1,0 +1,9 @@
+program calculo:
+begin
+x = 10;
+x = x+2;
+write(x);
+y = x*5;
+write(y);
+write('aa')
+end.
