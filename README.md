@@ -7,9 +7,7 @@ Compiladores / Linguagens Formais e Autômatos.
 
 A especificação completa da linguagem (gramática BNF, tokens, semântica operacional e exemplos) 
 
-> ⚠️ **Status do projeto: em desenvolvimento.**
-> Atualmente apenas o **analisador léxico, analisador sintático e AST** 
-> Analisador semântico e interpretador ainda não foram implementados.
+> ⚠️ **Status do projeto: finalizado.**
 
 ## Sobre a MiniLang
 
@@ -40,8 +38,11 @@ Código-fonte (.minilang)
 src/
 ├── Cabeca.java        # Função principal que recebe entradas, faz chamados de funções e imprimi saídas
 ├── Cabeca.class       # Arquivo class gerado na "compilação" da classe Cabeca
+├── compilar.bat        # Arquivo .bat para executar o código juntando a parte java com a parte antlr4
+├── compilar.sh       # Arquivo .sh para automatizar a tarefa de compilar o código
 ├── ErroCompilacao.java  # Demonstração de erros de compilação com base na léxica e sintática da gramática
 ├── ErroCompilacao.class # Arquivo class gerado na "compilação" da classe ErroCompilacao
+├── Interpretador.java    # Arquivo java que interpreta os comandos e condições
 ├── leitor.java        # Leitor de arquivo com buffer duplo e rollback de lexema
 ├── leitor.class        # Arquivo class gerado na "compilação" da classe leitor
 ├── lexic.java          # Programa de teste do lexer (imprime os tokens de um arquivo)
@@ -60,22 +61,33 @@ src/
 └── Token.class         # Arquivo class gerado na "compilação" da classe Cabeca
 └── antlr/├──antlr-4.13.2-complete.jar # Versão do Antlr4 para usar como Token
           ├──gramatica.txt # Gramática minilang em txt
+          ├──Aritimetico.java # Classe java responsável por cálculos aritiméticos
+          ├──expr.g4 # Código Antlr4 responsável pela precedência das operações e lógica aritimética
+          ├──expr.interp # Interpretador gerado pelo expr.g4
+          ├──expr.tokens # Tokens gerados pelo expr.g4
+          ├──exprBaseListener.java # Lista gerado pelo expr.g4
+          ├──exprBaseVisitor.java # Visitor gerado pelo expr.g4
+          ├──exprLexer.java # Lexer gerado pelo expr.g4
+          ├──exprLexer.interp # Interpretador léxico gerado pelo expr.g4
+          ├──exprLexer.tokens # Tokens léxicos gerado pelo expr.g4
+          ├──exprListener.java # Lista gerado pelo expr.g4
+          ├──exprParser.java # Código Antlr4 responsável pela precedência das operações e lógica aritimética
+          ├──exprVisitor.java # Visitor gerado pelo expr.g4
           ├──lexeri.java # Classe java gerada pelo lexeri.g4
           ├──lexeri.g4   # Léxica da gramática feita apartir do Antlr4
           ├──lexeri.interp # Interpretador gerado pelo lexeri.g4
           ├──lexeri.token # Tokens gerados pelo lexri.g4
           └──principal.java
 exemplos/
+├──calc.minilang        # Exemplo de um calculo matemático sem a estrutura de código minilang
+├──maximo.minilang        # Exemplo funcional de código minilang em cálculo aritimético
 ├──erro.minilang         # Exemplo de erros na linguagem minilang 
 ├──fatorial.minilang      # Exemplo funcional de código minilang em fatorial
 ├──maximo.minilang        # Exemplo funcional de código minilang em valor máximo
 └──soma_ate_zero.minilang   # Exemplo funcional de código minilang em soma até zero
 ```
 
-Ainda não existem os pacotes/classes de **semântica** e **interpretador** — fazem
-parte do roadmap.
-
-## Como compilar e rodar (estado atual)
+## Como compilar e rodar
 
 ### Antlr4
 
@@ -108,7 +120,6 @@ java -jar antlr-4.13.2-complete.jar expr.g4
 
 <img width="400" height="306" alt="antlr4_img_1" src="https://github.com/NickTigas/compilador_minilang_java/blob/master/imagens/antlr4_img_5.png" />
 
-Hoje só é possível rodar o teste do analisador léxico e sintático com geração AST
 
 ```bash
 cd src
