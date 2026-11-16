@@ -98,6 +98,7 @@ cd compilador_minilang_java\src\antlr4
 ```
 
 - Depois deve se gerar os arquivos da gramática caso eles não existam dentro da pasta antlr4 através da linha de comando:
+(⚠️ ***Atualmente no código não se faz necessário para compilar, somente caso queira alterar o código***)
 
 ```bash
 java -jar antlr-4.13.2-complete.jar lexeri.g4
