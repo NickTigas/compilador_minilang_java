@@ -122,7 +122,7 @@ java -jar antlr-4.13.2-complete.jar expr.g4
 
 <img width="400" height="306" alt="antlr4_img_1" src="https://github.com/NickTigas/compilador_minilang_java/blob/master/imagens/antlr4_img_5.png" />
 
-
+Após as dependências, basta executar o comando a seguir no cmd da IDE, para rodar o código
 ```bash
 Ex: src\compilar.bat exemplos\calculo.minilang
 ```
