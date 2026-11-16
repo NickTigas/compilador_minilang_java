@@ -5,7 +5,7 @@ imperativa e extremamente simplificada, criada para fins didáticos na disciplin
 Compiladores / Linguagens Formais e Autômatos.
 - O código foi feito utilizando-se da _**IDE IntelliJ**_<br>
 
-A especificação completa da linguagem (gramática BNF, tokens, semântica operacional e exemplos) 
+A especificação completa da linguagem (gramática BNF, tokens, léxica, sintática, semântica operacional e exemplos) 
 
 > ⚠️ **Status do projeto: finalizado.**
 
