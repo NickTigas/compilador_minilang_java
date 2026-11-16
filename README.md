@@ -124,8 +124,6 @@ java -jar antlr-4.13.2-complete.jar expr.g4
 
 
 ```bash
-cd src
-javac *.java
 Ex: src\compilar.bat exemplos\calculo.minilang
 ```
 ### Jdk
