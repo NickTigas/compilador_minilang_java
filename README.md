@@ -4,8 +4,9 @@ Implementação de um interpretador para a **MiniLang**, uma linguagem de progra
 imperativa e extremamente simplificada, criada para fins didáticos na disciplina de
 Compiladores / Linguagens Formais e Autômatos.
 - O código foi feito utilizando-se da _**IDE IntelliJ**_<br>
+link do GitHub: https://github.com/NickTigas/compilador_minilang_java<br>
 
-A especificação completa da linguagem (gramática BNF, tokens, léxica, sintática, semântica operacional e exemplos) 
+A especificação completa da linguagem (gramática BNF, tokens, léxica, sintática, semântica operacional e exemplos)
 
 > ⚠️ **Status do projeto: finalizado.**
 
