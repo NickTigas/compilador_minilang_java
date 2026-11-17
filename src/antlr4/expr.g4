@@ -24,8 +24,10 @@ termo returns [int val]
 
 termo2 [int her] returns [int sint]
     : '*' fator termo2[$her * $fator.val] { $sint = $termo2.sint; }
-    | '/' fator termo2[$her / $fator.val] { $sint = $termo2.sint; }
-    |                                     { $sint = $her; }
+    | '/' fator { if($fator.val == 0){
+                        throw new RuntimeException("Erro de execucao divisao por zero");}
+                        } termo2[$her / $fator.val] { $sint = $termo2.sint; }
+    |  { $sint = $her; }
     ;
 
 fator returns [int val]
@@ -34,10 +36,7 @@ fator returns [int val]
     | ID {
         Integer valor = vars.get($ID.text);
 
-        if (valor == null)
-            throw new RuntimeException(
-                "Variável '" + $ID.text + "' sem valor"
-            );
+        if (valor == null) valor = 0;
 
         $val = valor;
     }

@@ -351,7 +351,7 @@ public class exprParser extends Parser {
 		Termo2Context _localctx = new Termo2Context(_ctx, getState(), her);
 		enterRule(_localctx, 8, RULE_termo2);
 		try {
-			setState(48);
+			setState(49);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__2:
@@ -373,7 +373,10 @@ public class exprParser extends Parser {
 				match(T__3);
 				setState(43);
 				((Termo2Context)_localctx).fator = fator();
-				setState(44);
+				 if(((Termo2Context)_localctx).fator.val == 0){
+				                        throw new RuntimeException("Erro de execucao divisao por zero");}
+				                        
+				setState(45);
 				((Termo2Context)_localctx).termo2 = termo2(_localctx.her / ((Termo2Context)_localctx).fator.val);
 				 ((Termo2Context)_localctx).sint =  ((Termo2Context)_localctx).termo2.sint; 
 				}
@@ -431,17 +434,17 @@ public class exprParser extends Parser {
 		FatorContext _localctx = new FatorContext(_ctx, getState());
 		enterRule(_localctx, 10, RULE_fator);
 		try {
-			setState(59);
+			setState(60);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__4:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(50);
-				match(T__4);
 				setState(51);
-				((FatorContext)_localctx).expressao = expressao();
+				match(T__4);
 				setState(52);
+				((FatorContext)_localctx).expressao = expressao();
+				setState(53);
 				match(T__5);
 				 ((FatorContext)_localctx).val =  ((FatorContext)_localctx).expressao.val; 
 				}
@@ -449,7 +452,7 @@ public class exprParser extends Parser {
 			case NUM:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(55);
+				setState(56);
 				((FatorContext)_localctx).NUM = match(NUM);
 				 ((FatorContext)_localctx).val =  Integer.parseInt((((FatorContext)_localctx).NUM!=null?((FatorContext)_localctx).NUM.getText():null)); 
 				}
@@ -457,15 +460,12 @@ public class exprParser extends Parser {
 			case ID:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(57);
+				setState(58);
 				((FatorContext)_localctx).ID = match(ID);
 
 				        Integer valor = vars.get((((FatorContext)_localctx).ID!=null?((FatorContext)_localctx).ID.getText():null));
 
-				        if (valor == null)
-				            throw new RuntimeException(
-				                "Variável '" + (((FatorContext)_localctx).ID!=null?((FatorContext)_localctx).ID.getText():null) + "' sem valor"
-				            );
+				        if (valor == null) valor = 0;
 
 				        ((FatorContext)_localctx).val =  valor;
 				    
@@ -487,7 +487,7 @@ public class exprParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\u0004\u0001\t>\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
+		"\u0004\u0001\t?\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
 		"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004\u0002"+
 		"\u0005\u0007\u0005\u0001\u0000\u0001\u0000\u0001\u0000\u0001\u0000\u0001"+
 		"\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0002\u0001\u0002\u0001"+
@@ -495,36 +495,37 @@ public class exprParser extends Parser {
 		"\u0002\u0001\u0002\u0001\u0002\u0003\u0002 \b\u0002\u0001\u0003\u0001"+
 		"\u0003\u0001\u0003\u0001\u0003\u0001\u0004\u0001\u0004\u0001\u0004\u0001"+
 		"\u0004\u0001\u0004\u0001\u0004\u0001\u0004\u0001\u0004\u0001\u0004\u0001"+
-		"\u0004\u0001\u0004\u0003\u00041\b\u0004\u0001\u0005\u0001\u0005\u0001"+
+		"\u0004\u0001\u0004\u0001\u0004\u0003\u00042\b\u0004\u0001\u0005\u0001"+
 		"\u0005\u0001\u0005\u0001\u0005\u0001\u0005\u0001\u0005\u0001\u0005\u0001"+
-		"\u0005\u0003\u0005<\b\u0005\u0001\u0005\u0000\u0000\u0006\u0000\u0002"+
-		"\u0004\u0006\b\n\u0000\u0000=\u0000\f\u0001\u0000\u0000\u0000\u0002\u0010"+
-		"\u0001\u0000\u0000\u0000\u0004\u001f\u0001\u0000\u0000\u0000\u0006!\u0001"+
-		"\u0000\u0000\u0000\b0\u0001\u0000\u0000\u0000\n;\u0001\u0000\u0000\u0000"+
-		"\f\r\u0003\u0002\u0001\u0000\r\u000e\u0005\u0000\u0000\u0001\u000e\u000f"+
-		"\u0006\u0000\uffff\uffff\u0000\u000f\u0001\u0001\u0000\u0000\u0000\u0010"+
-		"\u0011\u0003\u0006\u0003\u0000\u0011\u0012\u0003\u0004\u0002\u0000\u0012"+
-		"\u0013\u0006\u0001\uffff\uffff\u0000\u0013\u0003\u0001\u0000\u0000\u0000"+
-		"\u0014\u0015\u0005\u0001\u0000\u0000\u0015\u0016\u0003\u0006\u0003\u0000"+
-		"\u0016\u0017\u0003\u0004\u0002\u0000\u0017\u0018\u0006\u0002\uffff\uffff"+
-		"\u0000\u0018 \u0001\u0000\u0000\u0000\u0019\u001a\u0005\u0002\u0000\u0000"+
-		"\u001a\u001b\u0003\u0006\u0003\u0000\u001b\u001c\u0003\u0004\u0002\u0000"+
-		"\u001c\u001d\u0006\u0002\uffff\uffff\u0000\u001d \u0001\u0000\u0000\u0000"+
-		"\u001e \u0006\u0002\uffff\uffff\u0000\u001f\u0014\u0001\u0000\u0000\u0000"+
-		"\u001f\u0019\u0001\u0000\u0000\u0000\u001f\u001e\u0001\u0000\u0000\u0000"+
-		" \u0005\u0001\u0000\u0000\u0000!\"\u0003\n\u0005\u0000\"#\u0003\b\u0004"+
-		"\u0000#$\u0006\u0003\uffff\uffff\u0000$\u0007\u0001\u0000\u0000\u0000"+
-		"%&\u0005\u0003\u0000\u0000&\'\u0003\n\u0005\u0000\'(\u0003\b\u0004\u0000"+
-		"()\u0006\u0004\uffff\uffff\u0000)1\u0001\u0000\u0000\u0000*+\u0005\u0004"+
-		"\u0000\u0000+,\u0003\n\u0005\u0000,-\u0003\b\u0004\u0000-.\u0006\u0004"+
-		"\uffff\uffff\u0000.1\u0001\u0000\u0000\u0000/1\u0006\u0004\uffff\uffff"+
-		"\u00000%\u0001\u0000\u0000\u00000*\u0001\u0000\u0000\u00000/\u0001\u0000"+
-		"\u0000\u00001\t\u0001\u0000\u0000\u000023\u0005\u0005\u0000\u000034\u0003"+
-		"\u0002\u0001\u000045\u0005\u0006\u0000\u000056\u0006\u0005\uffff\uffff"+
-		"\u00006<\u0001\u0000\u0000\u000078\u0005\u0007\u0000\u00008<\u0006\u0005"+
-		"\uffff\uffff\u00009:\u0005\b\u0000\u0000:<\u0006\u0005\uffff\uffff\u0000"+
-		";2\u0001\u0000\u0000\u0000;7\u0001\u0000\u0000\u0000;9\u0001\u0000\u0000"+
-		"\u0000<\u000b\u0001\u0000\u0000\u0000\u0003\u001f0;";
+		"\u0005\u0001\u0005\u0003\u0005=\b\u0005\u0001\u0005\u0000\u0000\u0006"+
+		"\u0000\u0002\u0004\u0006\b\n\u0000\u0000>\u0000\f\u0001\u0000\u0000\u0000"+
+		"\u0002\u0010\u0001\u0000\u0000\u0000\u0004\u001f\u0001\u0000\u0000\u0000"+
+		"\u0006!\u0001\u0000\u0000\u0000\b1\u0001\u0000\u0000\u0000\n<\u0001\u0000"+
+		"\u0000\u0000\f\r\u0003\u0002\u0001\u0000\r\u000e\u0005\u0000\u0000\u0001"+
+		"\u000e\u000f\u0006\u0000\uffff\uffff\u0000\u000f\u0001\u0001\u0000\u0000"+
+		"\u0000\u0010\u0011\u0003\u0006\u0003\u0000\u0011\u0012\u0003\u0004\u0002"+
+		"\u0000\u0012\u0013\u0006\u0001\uffff\uffff\u0000\u0013\u0003\u0001\u0000"+
+		"\u0000\u0000\u0014\u0015\u0005\u0001\u0000\u0000\u0015\u0016\u0003\u0006"+
+		"\u0003\u0000\u0016\u0017\u0003\u0004\u0002\u0000\u0017\u0018\u0006\u0002"+
+		"\uffff\uffff\u0000\u0018 \u0001\u0000\u0000\u0000\u0019\u001a\u0005\u0002"+
+		"\u0000\u0000\u001a\u001b\u0003\u0006\u0003\u0000\u001b\u001c\u0003\u0004"+
+		"\u0002\u0000\u001c\u001d\u0006\u0002\uffff\uffff\u0000\u001d \u0001\u0000"+
+		"\u0000\u0000\u001e \u0006\u0002\uffff\uffff\u0000\u001f\u0014\u0001\u0000"+
+		"\u0000\u0000\u001f\u0019\u0001\u0000\u0000\u0000\u001f\u001e\u0001\u0000"+
+		"\u0000\u0000 \u0005\u0001\u0000\u0000\u0000!\"\u0003\n\u0005\u0000\"#"+
+		"\u0003\b\u0004\u0000#$\u0006\u0003\uffff\uffff\u0000$\u0007\u0001\u0000"+
+		"\u0000\u0000%&\u0005\u0003\u0000\u0000&\'\u0003\n\u0005\u0000\'(\u0003"+
+		"\b\u0004\u0000()\u0006\u0004\uffff\uffff\u0000)2\u0001\u0000\u0000\u0000"+
+		"*+\u0005\u0004\u0000\u0000+,\u0003\n\u0005\u0000,-\u0006\u0004\uffff\uffff"+
+		"\u0000-.\u0003\b\u0004\u0000./\u0006\u0004\uffff\uffff\u0000/2\u0001\u0000"+
+		"\u0000\u000002\u0006\u0004\uffff\uffff\u00001%\u0001\u0000\u0000\u0000"+
+		"1*\u0001\u0000\u0000\u000010\u0001\u0000\u0000\u00002\t\u0001\u0000\u0000"+
+		"\u000034\u0005\u0005\u0000\u000045\u0003\u0002\u0001\u000056\u0005\u0006"+
+		"\u0000\u000067\u0006\u0005\uffff\uffff\u00007=\u0001\u0000\u0000\u0000"+
+		"89\u0005\u0007\u0000\u00009=\u0006\u0005\uffff\uffff\u0000:;\u0005\b\u0000"+
+		"\u0000;=\u0006\u0005\uffff\uffff\u0000<3\u0001\u0000\u0000\u0000<8\u0001"+
+		"\u0000\u0000\u0000<:\u0001\u0000\u0000\u0000=\u000b\u0001\u0000\u0000"+
+		"\u0000\u0003\u001f1<";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

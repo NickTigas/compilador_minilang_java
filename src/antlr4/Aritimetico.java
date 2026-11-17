@@ -36,7 +36,8 @@ public class Aritimetico {
         parser.removeErrorListeners();
         parser.addErrorListener(ouvinte(caminho));
 
-        return parser.program().val;
+        return  parser.program().val;
+
     }
 
     private static BaseErrorListener ouvinte(String arquivo) {
@@ -75,4 +76,5 @@ public class Aritimetico {
 
         return parser.program().val;
     }
+
 }
